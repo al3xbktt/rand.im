@@ -26,6 +26,8 @@
     overflow-y:auto;
     overflow-x:hidden;
     flex-direction: column-reverse;
+    background-color:#410E25; 
+    border-radius:50px;
   }
   
   .chatroom .messages-chatroom .message {
@@ -81,20 +83,20 @@
   }
 
   .footer-chat {
-    width: 96%;
-    height: 90px;
+    width: 65vw;
+    height:6.5vh;
     display:flex;
     align-items: center;
-    top: 65%;
-    margin-bottom:20px;
-    margin-left:20px;
-    background-color: transparent;
-    position:sticky;
-    }
+    top:-85%;
+    margin-top:10px;
+    background-color: #fff;
+  }
   
   .write-message {
     border:none !important;
     width:97%;
+    margin-left:1%;  
+    margin-top:1%;
   }
   
   .row .chat{
