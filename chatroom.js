@@ -44,3 +44,9 @@ function writeResponderMessage() {
       $("#chatroom").stop().animate({ scrollTop: $("#chatroom")[0].scrollHeight}, 1000);
     };
   };
+
+  function setResponder() {
+    let responder = prompt("WIP SET RESPONDER NAME").toUpperCase();
+    $("#rUser").html(responder);
+
+  };
