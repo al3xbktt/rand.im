@@ -72,7 +72,7 @@
   
   .response {
     float: left;
-    margin-left: 1.5vw !important;
+    margin-left: .75vw !important;
     margin-right:auto; /* flexbox alignment rule */
   }
   
