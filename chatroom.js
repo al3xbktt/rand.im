@@ -47,6 +47,11 @@ function writeResponderMessage() {
 
   function setResponder() {
     let responder = prompt("WIP SET RESPONDER NAME").toUpperCase();
-    $("#rUser").html(responder);
-
-  };
+    let length=8;
+    if (responder <=10)
+      $("#rUser").html(responder);
+    else{
+      $("#rUser").html(responder.slice(0,length) + "...")
+      $("#rUser").attr('title', responder);
+      }
+    };
