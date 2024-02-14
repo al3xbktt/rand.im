@@ -3,3 +3,14 @@ button {
     width: 100px;
     margin: 0 auto;
 }
+
+@font-face {
+    font-family: Open-Sans;
+    font-style: normal;
+    font-weight: 400;
+    src: url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+  }
+
+  body {
+    font-family:Open-Sans, sans-serif;
+  }
