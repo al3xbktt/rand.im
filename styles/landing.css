@@ -1,39 +1,31 @@
-@font-face {
-    font-family: Open-Sans;
-    font-style: normal;
-    font-weight: 400;
-    src: url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-  }
+#custom-button {
+  background-color: #D84A68;
+  color: white;
+  font-weight: bold;
+  font-size: 2.5vw; /* Reduced font size */
+  padding: 10px 20px; /* Reduced padding */
+  border: none;
+  border-radius: 30px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
 
-@font-face {
-    font-family: Bebas Neue;
-    font-style: normal;
-    font-weight: 400;
-    src: url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
-  }
+#custom-button:hover {
+  background-color: #C04260;
+}
 
-  button{
-    font-family:'Bebas Neue', sans-serif;
-  }
-
-  body {
-    font-family:'Open-Sans', sans-serif;
-  }
-  /*Custom button styles */
-  #custom-button {
-    background-color: #D84A68;
-    color: white;
-    font-weight: bold;
-    font-size: 2.5vw;
-    padding: 15px 32px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: relative;
-    top: 300px;
-    transition: background-color 0.3s ease;
-  }
-  
-  #custom-button:hover {
-    background-color: #C04260;
-  }
+#customtext {
+  position: relative; /* Adds relative positioning */
+  top: 400px; /* Moves the text down by 100px */
+  left: 20px; /* Moves the text to the right by 100px */
+  right: 100px;
+  bottom: 400px;
+  color: #D84A68;
+  font-weight: bold;
+  font-size: 2.5vw;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
