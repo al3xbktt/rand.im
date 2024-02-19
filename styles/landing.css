@@ -4,22 +4,23 @@
   font-weight: bold;
   font-size: 2.5vw; /* Reduced font size */
   padding: 10px 20px; /* Reduced padding */
-  border: none;
+  border: 5px solid #F0739A; /* Adds a border with the color #F0739A */
   border-radius: 30px;
   text-align: center;
   transition: background-color 0.3s ease;
 }
 
 #custom-button:hover {
-  background-color: #C04260;
+  background-color: #F0739A; /* Changes the background color to #F0739A on hover */
 }
 
+/*It's so the text can be on top of the button*/
 #customtext {
   position: relative; /* Adds relative positioning */
-  top: 400px; /* Moves the text down by 100px */
-  left: 20px; /* Moves the text to the right by 100px */
-  right: 100px;
-  bottom: 400px;
+  top: 450px; /* Moves the text down by 100px */
+  left: 1px; /* Moves the text to the right by 100px */
+  right: 10px;
+  bottom: 300px;
   color: #D84A68;
   font-weight: bold;
   font-size: 2.5vw;

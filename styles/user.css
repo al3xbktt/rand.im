@@ -1,0 +1,26 @@
+#custom-button {
+    background-color: #D84A68;
+    color: white;
+    font-weight: bold;
+    font-size: 2.5vw;
+    padding: 10px 20px;
+    border: 5px solid #F0739A;
+    border-radius: 30px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  #custom-button:hover {
+    background-color: #F0739A;
+  }
+  
+  #nameInput {
+    position: relative;
+    font-weight: bold;
+    font-size: 2.5vw;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
