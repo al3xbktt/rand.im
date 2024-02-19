@@ -1,0 +1,57 @@
+/* 
+This is the CSS for the .container class. It's used to style the main container of the webpage. 
+The container is designed to display its children (an image, a textbox, and a button) in a vertical stack and center them both vertically and horizontally.
+*/
+.container {
+  display: flex; /* This enables flexbox layout */
+  flex-direction: column; /* This stacks the children vertically */
+  align-items: center; /* This centers the children horizontally */
+  justify-content: center; /* This centers the children vertically */
+}
+
+
+/*This is for the image size*/
+#userImage {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 20px; /* Adjust as needed */
+}
+
+/*This is for the textbox*/
+#nameInput {
+  position: relative;
+  font-weight: bold;
+  font-size: 2.5vw;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  text-align: center;
+  background-color: rgba(211, 211, 211, 0.1);
+  transition: background-color 0.3s ease;
+  width: 500px; /* Set a specific width */
+}
+
+/*This is for the Join button*/
+#custom-button {
+  background-color: #D84A68;
+  color: white;
+  font-weight: bold;
+  font-size: 2.5vw;
+  padding: 10px 20px;
+  border: 5px solid #F0739A;
+  border-radius: 30px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  width: 500px; /* Set the same width as the textbox */
+}
+
+
+/*This is for the Join button*/
+#custom-button:hover {
+  background-color: #F0739A;
+}
+
+/*This is for the textbox*/
+#nameInput:focus {
+  background-color: rgba(211, 211, 211, 0.2);
+}

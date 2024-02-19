@@ -1,27 +1,23 @@
-button {
-    display: block;
-    width: 100px;
-    margin: 0 auto;
+/*This is for the Join button*/
+#custom-button {
+  background-color: #D84A68;
+  color: white;
+  font-weight: bold;
+  font-size: 2.5vw; /* Set the same font size as the text */
+  padding: 10px 20px; /* Reduced padding */
+  border: 5px solid #F0739A; /* Adds a border with the color #F0739A */
+  border-radius: 30px;
+  transition: background-color 0.3s ease;
 }
 
-@font-face {
-    font-family: Open-Sans;
-    font-style: normal;
-    font-weight: 400;
-    src: url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-  }
+#custom-button:hover {
+  background-color: #F0739A; /* Changes the background color to #F0739A on hover */
+}
 
-@font-face {
-    font-family: Bebas Neue;
-    font-style: normal;
-    font-weight: 400;
-    src: url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
-  }
-
-  button{
-    font-family:'Bebas Neue', sans-serif;
-  }
-
-  body {
-    font-family:'Open-Sans', sans-serif;
-  }
+/*It's so the text can be on top of the button*/
+#customtext {
+  color: #D84A68;
+  font-weight: bold;
+  font-size: 2.5vw; /* Set a specific font size */
+  margin-bottom: 20px; /* Adds some space between the text and the button */
+}

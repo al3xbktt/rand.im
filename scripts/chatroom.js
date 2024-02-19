@@ -55,3 +55,17 @@ function writeResponderMessage() {
       $("#rUser").attr('title', responder);
       }
     };
+
+    function setUser() {
+      let querystring = window.location.search;
+      let urlParam = new URLSearchParams(name);
+      let uName = urlParam.get('name')
+      uName.toUpperCase();
+      let length=8;
+      if (uName <=10)
+        $(uName).html(user);
+      else{
+        $(uName).html(user.slice(0,length) + "...");
+        $(uName).attr('title', user);
+        }
+      };
