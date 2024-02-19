@@ -48,8 +48,10 @@ function writeResponderMessage() {
   function setResponder() {
     let responder = prompt("WIP SET RESPONDER NAME").toUpperCase();
     let length=8;
-    if (responder.length <=10)
+    if (responder.length <=10){
       $("#rUser").html(responder);
+      $("#rUser").attr('title', responder);
+    }
     else{
       $("#rUser").html(responder.slice(0,length) + "...")
       $("#rUser").attr('title', responder);
@@ -62,9 +64,11 @@ function writeResponderMessage() {
       let user = urlParam.get('name');
       user = user.toUpperCase();
       let length=8;
-      if (user.length <=10)
+      if (user.length <=10){
         $("#uName").html(user);
-      else{
+        $("#uName").attr('title', user);
+      }
+        else{
         $("#uName").html(user.slice(0,length) + "...");
         $("#uName").attr('title', user);
         }
