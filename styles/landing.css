@@ -21,3 +21,11 @@
   font-size: 2.5vw; /* Set a specific font size */
   margin-bottom: 20px; /* Adds some space between the text and the button */
 }
+
+.text-stroke {
+  text-shadow:
+  1px 1px 0 #fff,
+  -1px 1px 0 #fff,
+  -1px -1px 0 #fff,
+  1px -1px 0 #fff;
+}
