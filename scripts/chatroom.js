@@ -48,7 +48,7 @@ function writeResponderMessage() {
   function setResponder() {
     let responder = prompt("WIP SET RESPONDER NAME").toUpperCase();
     let length=8;
-    if (responder <=10)
+    if (responder.length <=10)
       $("#rUser").html(responder);
     else{
       $("#rUser").html(responder.slice(0,length) + "...")
@@ -57,15 +57,15 @@ function writeResponderMessage() {
     };
 
     function setUser() {
-      let querystring = window.location.search;
-      let urlParam = new URLSearchParams(name);
-      let uName = urlParam.get('name')
-      uName.toUpperCase();
+      let queryString = window.location.search;
+      let urlParam = new URLSearchParams(queryString);
+      let user = urlParam.get('name');
+      user = user.toUpperCase();
       let length=8;
-      if (uName <=10)
-        $(uName).html(user);
+      if (user.length <=10)
+        $("#uName").html(user);
       else{
-        $(uName).html(user.slice(0,length) + "...");
-        $(uName).attr('title', user);
+        $("#uName").html(user.slice(0,length) + "...");
+        $("#uName").attr('title', user);
         }
       };
