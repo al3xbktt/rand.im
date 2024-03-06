@@ -1,35 +1,33 @@
-
+const app = require('express')();
 const express = require('express');
-const path = require('path');
-const { createServer } = require('node:http');
-const { join } = require('node:path');
-const { Server } = require('socket.io');
-const app = express();
-const server = createServer(app);
-const io = new Server(server);
+const http = require('http').createServer(app);
+const cors = require('cors');
+const PORT = process.env.PORT || 5000;
+const io = require('socket.io')(http)
+
 
 app.use("/public", express.static(__dirname + '/public'));
 
+app.use(cors());
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/chatroom.html');
-  });
-  
 io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-      console.log ('a user disconnected');
-    });
+  console.log('a user connected');
+  
+  socket.on("sendMessage", message => {
+    console.log('message: ' + message);
+  });
+
+  socket.on("disconnect", () => {
+    console.log('a user disconnected');
+  });
+
 });
 
-  server.listen(3000, () => {
-    console.log('server running at http://localhost:3000');
-  });
-  
-  io.on('connection', (socket) => {
-    socket.on('chatmessage', (msg) => {
-      console.log('message:'  + msg);
-    });
-  });
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/chatroom.html');
+});
 
-  
+http.listen(PORT, () => {
+  console.log(`Listening to ${PORT}`);
+});
+

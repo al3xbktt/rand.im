@@ -1,7 +1,4 @@
-const socket = io();
-
 function getTime() {
-
   var now = new Date(Date.now());
   var hours = now.getHours();
   var amPM = hours >= 12 ? 'pm' : 'am';
@@ -12,19 +9,33 @@ function getTime() {
   return time
 }
 
-$("#chatbar").keypress(function(e) {
-  if(e.which == 13 && !e.shiftKey) {
-    $("#submitButton").click();
+$( "#chatbar" ).on( "keydown", function(e) {
+   if(e.which == 13 && !e.shiftKey) {
+    $("#submitButton").trigger("click");
     e.preventDefault();
   }
-});
+} );
 
 function acceptMessage() {
   let message= $("#chatbar").val();
-  writeMessage(message,true);
+  writeMessage(message,true);  
 }
 
+// functionality = when the client is detected typing, the socket will mark check to true for the user on the other end 
+function isTyping(check=false) {
+  if (check){
+  var indicator = 
+  `<div class="row chat isTyping" style="margin-bottom:10px;"> 
+  <div class="chatoom messages-chatroom response"> <div class="response text"> <div class="typingIndicatorBubbleDot"></div>
+  <div class="typingIndicatorBubbleDot"></div> <div class="typingIndicatorBubbleDot"></div></div></div></div>`;
+    $("#chatroom").html($("#chatroom").html() + indicator);
+  }
+  if (!check){
+    $('.isTyping').remove();
+  }
+}
 
+// functionality = writes the message in a chat bubble from string, detects if it's the user through boolean
 function writeMessage(message, ownMessage) {
   var text;
   if (ownMessage){
@@ -35,6 +46,7 @@ function writeMessage(message, ownMessage) {
       </div>`;
 
   }
+
   else {
     text = 
     `<div class="row chat">
@@ -49,11 +61,8 @@ function writeMessage(message, ownMessage) {
       $("#chatroom").stop().animate({ scrollTop: $("#chatroom")[0].scrollHeight}, 1000);
     };
   };
-
-  socket.on("connection", (socket) => {
-    console.log(socket.id);
-  });
   
+  //functionality = pull the other user's 
   function setResponder() {
     let responder = prompt("WIP SET RESPONDER NAME").toUpperCase();
     let length=8;
@@ -67,18 +76,19 @@ function writeMessage(message, ownMessage) {
       }
     };
 
-    function setUser() {
-      let queryString = window.location.search;
-      let urlParam = new URLSearchParams(queryString);
-      let user = urlParam.get('name');
-      user = user.toUpperCase();
-      let length=8;
-      if (user.length <=10){
-        $("#uName").html(user);
-        $("#uName").attr('title', user);
+  //functionality = pull the client's username and set their username as it
+  function setUser() {
+    let queryString = window.location.search;
+    let urlParam = new URLSearchParams(queryString);
+    let user = urlParam.get('name');
+    user = user.toUpperCase();
+    let length=8;
+    if (user.length <=10){
+      $("#uName").html(user);
+      $("#uName").attr('title', user);
+    }
+    else{
+      $("#uName").html(user.slice(0,length) + "...");
+      $("#uName").attr('title', user);
       }
-        else{
-        $("#uName").html(user.slice(0,length) + "...");
-        $("#uName").attr('title', user);
-        }
-      };
+    };

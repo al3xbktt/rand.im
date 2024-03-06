@@ -61,7 +61,7 @@
     max-width:50%;
   }
   
-  
+
   .time {
     font-size: 10px;
     color:white;
@@ -119,5 +119,41 @@
     padding-bottom:1vh;
     
   }
-
+  
+  .typingIndicatorBubbleDot {
+    width: 0.5vw;
+    height: 0.5vw;
+    float:left;
+    background-color: #fff;
+    border-radius: 50%;
+    animation-name: bounce;
+    animation-duration: 1.3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  
+  .typingIndicatorBubbleDot:first-of-type {
+    margin: 5px;
+  }
+  
+  .typingIndicatorBubbleDot:nth-of-type(2) {
+    margin:5px;
+    animation-delay: 0.15s;
+  }
+  
+  .typingIndicatorBubbleDot:nth-of-type(3) {
+    margin: 5px;
+    animation-delay: 0.3s;
+  }
+  
+  @keyframes bounce {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(-4px);
+    }
+  }
   
