@@ -1,3 +1,5 @@
+var timeout;
+
 function getTime() {
   var now = new Date(Date.now());
   var hours = now.getHours();
@@ -9,30 +11,35 @@ function getTime() {
   return time
 }
 
-$( "#chatbar" ).on( "keydown", function(e) {
-   if(e.which == 13 && !e.shiftKey) {
-    $("#submitButton").trigger("click");
-    e.preventDefault();
+$('#chatbar').on( "keydown", function(e) {
+  if(e.which == 13 && !e.shiftKey) {
+   $("#submitButton").trigger("click");
+   e.preventDefault();
+   emitTyping(false);
   }
 } );
 
-function acceptMessage() {
-  let message= $("#chatbar").val();
-  writeMessage(message,true);  
-}
+
+$('#chatbar').on( "keypress", function() {
+    emitTyping(true);
+    timeout = setTimeout(timeoutFunction,10000);
+  
+ });
+
 
 // functionality = when the client is detected typing, the socket will mark check to true for the user on the other end 
 function isTyping(check=false) {
   if (check){
-  var indicator = 
-  `<div class="row chat isTyping" style="margin-bottom:10px;"> 
-  <div class="chatoom messages-chatroom response"> <div class="response text"> <div class="typingIndicatorBubbleDot"></div>
-  <div class="typingIndicatorBubbleDot"></div> <div class="typingIndicatorBubbleDot"></div></div></div></div>`;
-    $("#chatroom").html($("#chatroom").html() + indicator);
-  }
+    var indicator = 
+    `<div class="row chat isTyping" style="margin-bottom:10px;"> 
+    <div class="chatoom messages-chatroom response"> <div class="response text"> <div class="typingIndicatorBubbleDot"></div>
+    <div class="typingIndicatorBubbleDot"></div> <div class="typingIndicatorBubbleDot"></div></div></div></div>`;
+      $("#isTypingArea").html($("#isTypingArea").html() + indicator);
+    }
   if (!check){
     $('.isTyping').remove();
   }
+  return check;
 }
 
 // functionality = writes the message in a chat bubble from string, detects if it's the user through boolean
@@ -91,4 +98,12 @@ function writeMessage(message, ownMessage) {
       $("#uName").html(user.slice(0,length) + "...");
       $("#uName").attr('title', user);
       }
+    };
+
+    function clearChat() {
+      $('.chat').remove();
+    };
+    
+    function timeoutFunction() {
+      emitTyping(false);
     };
