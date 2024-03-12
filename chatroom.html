@@ -51,29 +51,39 @@
             </div>
           </div>
         </div>    
-        <a href ="loading.html" class="btn rounded" id="reroll" type="submit" style="background-color:#D84A68; color:#fff; width:22vw; height:6.5vh; margin-left:-0.25vw;"><i class="bi bi-dice-6" style=" font-size:large;"> Reroll!</i></a>
-        </div>
+        <button class="btn rounded" id="reroll" type="submit" style="background-color:#D84A68; color:#fff; width:22vw; height:6.5vh; margin-left:-0.25vw;" onclick="showModal()"><i class="bi bi-dice-6" style=" font-size:large;"> Reroll!</i></button>
+        <button type = "button" class="btn rounded" id="mic" data-bs-toggle="button" style="background-color:#D84A68; color:#fff; margin-left:-0.25vw; margin-top:10px"><i class="bi bi-mic" style=" font-size:large;"></i></button>  
+        <button type = "button" class="btn rounded " id="video" data-bs-toggle="button" style="background-color:#D84A68; color:#fff; margin-left:0.25vw; margin-top:10px"><i class="bi bi-camera-video" style=" font-size:large;"></i></button>  
+        
+      </div>
 
         <!-- Chatroom -->
         <div class="col">
           <div class="card chatroom" id="chatroom">
             <div class="card-body" style="margin-top:-6vh; margin-bottom:6vh;">
-              </div>
-              <div id="isTypingArea">
-
             </div>
-        
         </div>
 
       <!-- TEXT INPUT BAR  -->   
       <div class="card-footer footer-chat" style=" border-radius:50px; ">
         <textarea type="text" class="write-message" id="chatbar" style="background-color:transparent; height:5vh; resize:none; margin-bottom:0.5%;" placeholder="Type here..."></textarea>
         <button class="btn rounded-circle" id="submitButton" type="submit" onclick="emitMessage($('#chatbar').val()),writeMessage($('#chatbar').val(),true)" style="background-color:#D84A68; color:#fff; float:left;"><i class="bi bi-send"></i></button>
-      </div>
-      </div>
+        
+        </div>
+     </div>
       
+      </div>
     </div>
-  </div>
+
+
+    <!-- rerolling modal -->
+    <div id="load-modal" class="modal">
+    <div class="modal-content center" style="text-align:center">
+        <img src="/public/images/loading.gif" style="width:10vw; margin: 5%;" id="loading">
+        <i class="bi bi-x" style="color:#fff; font-size:xx-large; position:absolute; top:5px; right:10px" onclick="hideModal()"></i>
+        <h1 style="color:white; font-size:2vw;" id="splashtext">Rerolling you a new partner!</h1>
+      </div>
+    </div>
 
   </body>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>

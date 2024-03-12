@@ -42,7 +42,7 @@ var findLonePeer = function(socket) {
   }
 
   else{ 
-    console.log(socket.id + " pushed into queue with username: " + socket.Username + " room: " + room);
+    console.log(socket.id + " pushed into queue with username: " + socket.Username);
     queue.push(socket);
   }
 };
@@ -66,9 +66,9 @@ io.on('connection', (socket) => {
     socket.broadcast.to(room).emit("chatMessage", message);
   });
   
-  socket.on('leaveRoom', () => {
+  socket.on('reroll', () => {
     var room = rooms[socket.id];
-    socket.broadcast.to(room).emit('chat end');
+    socket.broadcast.to(room).emit('chatEnd');
     var peerID = room.split('#');
     peerID = peerID[0] === socket.id ? peerID[1] : peerID[0];
     // add both current and peer to the queue

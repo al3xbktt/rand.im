@@ -107,3 +107,22 @@ function writeMessage(message, ownMessage) {
     function timeoutFunction() {
       emitTyping(false);
     };
+
+    function showModal(){
+
+      $("#load-modal").attr("style","display:block");
+    }
+    
+    function hideModal(){
+
+      $("#load-modal").attr("style","display:hidden");
+    }
+
+  function found(){
+      $("#splashtext").text("New Partner Found!");
+      $("#loading").attr("src","/public/images/found.svg");
+  }
+  
+  function load() {
+      window.location.replace("chatroom.html");
+    }
