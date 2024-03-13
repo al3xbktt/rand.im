@@ -34,7 +34,7 @@ function isTyping(check=false) {
     `<div class="row chat isTyping" style="margin-bottom:10px;"> 
     <div class="chatoom messages-chatroom response"> <div class="response text"> <div class="typingIndicatorBubbleDot"></div>
     <div class="typingIndicatorBubbleDot"></div> <div class="typingIndicatorBubbleDot"></div></div></div></div>`;
-      $("#isTypingArea").html($("#isTypingArea").html() + indicator);
+      $("#chatroom").html($("#chatroom").html() + indicator);
     }
   if (!check){
     $('.isTyping').remove();
@@ -45,28 +45,24 @@ function isTyping(check=false) {
 // functionality = writes the message in a chat bubble from string, detects if it's the user through boolean
 function writeMessage(message, ownMessage) {
   var text;
-  if (ownMessage){
+  if (ownMessage && message.length > 0){
     text = 
     `<div class="row chat">
       <div class="chatoom messages-chatroom user"> <p class="user text">` + message + `</p> </div>
       <div class="user-time"> <p class="user time">` + getTime() + `</p></div>
       </div>`;
-
   }
 
-  else {
+  else if (!ownMessage && message.length > 0) {
     text = 
     `<div class="row chat">
               <div class="chatoom messages-chatroom response"> <p class="response text">` + message + `</p> </div>
               <div class="time"> <p class="response time">` + getTime() + `</p></div>
               </div>`;
   }
-    if (message.length > 0 && message.trim().length > 0){
-      $("#chatroom").html($("#chatroom").html() + text);
-      $("#chatbar").val('');
-      $("#chatbar").scrollTop($("#chatbar")[0].scrollHeight);
-      $("#chatroom").stop().animate({ scrollTop: $("#chatroom")[0].scrollHeight}, 1000);
-    };
+  $("#chatroom").html($("#chatroom").html() + text);
+  $("#chatbar").scrollTop($("#chatbar")[0].scrollHeight);
+  $("#chatroom").stop().animate({ scrollTop: $("#chatroom")[0].scrollHeight}, 1000);
   };
   
   //functionality = pull the other user's 
@@ -101,7 +97,7 @@ function writeMessage(message, ownMessage) {
     };
 
     function clearChat() {
-      $('.chat').remove();
+      $('#chatroom').empty();
     };
     
     function timeoutFunction() {
@@ -118,11 +114,33 @@ function writeMessage(message, ownMessage) {
       $("#load-modal").attr("style","display:hidden");
     }
 
-  function found(){
-      $("#splashtext").text("New Partner Found!");
-      $("#loading").attr("src","/public/images/found.svg");
-  }
-  
-  function load() {
-      window.location.replace("chatroom.html");
+    function introduce(name){
+
+      var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+      text-align:center;"><p>You're now chatting with ` + name + `, say Hi!</p><hr style="color:#fff;height:1vh;"></div>`;
+
+      $("#chatroom").html($("#chatroom").html() + text);
+
+    };
+
+    function leaveRoom(name){
+      var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+      text-align:center;"><p>` + name + ` has left, hit "Reroll!" to find a new partner!</p></div>`;
+
+      $("#chatroom").html($("#chatroom").html() + text);
+
+    }
+
+    function textAbility(check){
+
+      if (check)
+        $('#chatbar').prop("disabled",false);
+      else
+        $('#chatbar').prop("disabled",);
+
+
+    }
+
+    function clearChatBar(){
+      $("#chatbar").val('');
     }

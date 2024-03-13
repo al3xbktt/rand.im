@@ -8,16 +8,15 @@ app.use("/public", express.static(__dirname + '/public'));
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/chatroom.html');
+  res.sendFile(__dirname + '/Userpage.html');
 });
 
 http.listen(PORT, 5001, () => {
   console.log(`Listening to ${PORT}`);
 });
 
-
-
-
+app.get('/chatroom', (req, res) => {
+  res.sendFile(__dirname + '/chatroom.html');
 
 var queue = [];
 var rooms = [];
@@ -25,6 +24,8 @@ var names = {};
 var allUsers = {};
 
 var findLonePeer = function(socket) {
+
+  var inQueue;
 
   if (queue.length != 0){
     // there is someone in queue
@@ -39,11 +40,18 @@ var findLonePeer = function(socket) {
     // exchange names
     peer.emit('chatStart', {name: names[socket.id],'room':room});
     socket.emit('chatStart', {name: names[peer.id],'room':room});
+    console.log(socket.id + " matched with " + peer.id + " in room: " + room );
+    inQueue = false;
   }
 
   else{ 
     console.log(socket.id + " pushed into queue with username: " + socket.Username);
     queue.push(socket);
+    inQueue = true;
+    socket.emit('loading', inQueue);
+    console.log("\ncurrent queue:");
+    printArray(queue);
+
   }
 };
 
@@ -52,7 +60,6 @@ io.on('connection', (socket) => {
   
   socket.on('login', (data) => {
     names[socket.id] = data.username;
-    console.log(data.username);
     allUsers[socket.id] = socket;
     findLonePeer(socket);
     console.log(socket.id + " logged in");
@@ -62,8 +69,12 @@ io.on('connection', (socket) => {
   // chat message
   socket.on("chatMessage", (message) => {
     var room = rooms[socket.id];
-    console.log('message from ' + socket.id + ': ' + message + ' in room: ' + room);
-    socket.broadcast.to(room).emit("chatMessage", message);
+    if (room != undefined ){
+      if (message.length >= 0){
+      console.log('message from ' + socket.id + ': "' + message + '" in room: ' + room);
+      socket.broadcast.to(room).emit("chatMessage", message);
+      }
+    }
   });
   
   socket.on('reroll', () => {
@@ -71,20 +82,30 @@ io.on('connection', (socket) => {
     socket.broadcast.to(room).emit('chatEnd');
     var peerID = room.split('#');
     peerID = peerID[0] === socket.id ? peerID[1] : peerID[0];
-    // add both current and peer to the queue
-    findPeerForLoneSocket(allUsers[peerID]);
-    findPeerForLoneSocket(socket);
+    socket.leave(room);
+    console.log(socket.id + " hit reroll!");
+    // add both current and peer to the queue unless the peer is disconnected
+    findLonePeer(socket);
+    if (allUsers[peerID] != null){
+      findLonePeer(allUsers[peerID]);
+    }
     });
 
   // disconnect
   socket.on("disconnect", () => {
     var room = rooms[socket.id];
     socket.broadcast.to(room).emit('chatEnd');
-    var peerID = room.split('#');
-    peerID = peerID[0] === socket.id ? peerID[1] : peerID[0];
+    console.log(socket.id + " disconnected.");
+    socket.broadcast.to(room).emit('disconnected');
+    allUsers[socket.id] = null;
+    console.log("Due to Disconnect, queue is now:")
+    
+  });
 
-    // add peer to queue
-    findLonePeer(allUsers[peerID]);
+  socket.on("waiting", () => {
+    var room = rooms[socket.id];
+    console.log(socket.id + " is alone, waiting on reroll");
+    socket.leave(room);
   });
 
   socket.on('isTyping',(data)=>{
@@ -95,5 +116,21 @@ io.on('connection', (socket) => {
       socket.broadcast.to(room).emit('isTyping',data);
   });
 
+  socket.on('loading',(data)=>{
+    var room = rooms[socket.id];
+    if (data)
+      socket.broadcast.to(room).emit('loading',data);
+    if (!data)
+      socket.broadcast.to(room).emit('loading',data);
+  });
+
 });
 
+function printArray(array){
+
+  array.forEach(function(x){
+    console.log(x.id + '\n');
+  });
+
+}
+});
