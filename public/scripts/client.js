@@ -5,7 +5,7 @@ var room = '';
 
 
 socket.on('connect', (data) =>{
-    console.log(data);
+    connected = true;
     if (userName) socket.emit('login', {"username :" : userName});
 });
 
