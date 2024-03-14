@@ -17,6 +17,8 @@ http.listen(PORT, 5001, () => {
 
 app.get('/chatroom', (req, res) => {
   res.sendFile(__dirname + '/chatroom.html');
+});
+
 
 var queue = [];
 var rooms = [];
@@ -133,4 +135,3 @@ function printArray(array){
   });
 
 }
-});
