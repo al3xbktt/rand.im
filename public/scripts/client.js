@@ -3,7 +3,6 @@ var connected = false;
 var userName = 'cyb3rflare';
 var room = '';
 
-
 socket.on('connect', (data) =>{
     connected = true;
     if (userName) socket.emit('login', {"username :" : userName});
@@ -80,4 +79,10 @@ function reroll(){
         socket.emit('reroll');
         console.log(room);
     }
+};
+
+function acceptUsername(name){
+
+    socket.emit('setUsername',name);
+
 };

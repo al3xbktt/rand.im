@@ -141,6 +141,12 @@ function writeMessage(message, ownMessage) {
 
     }
 
+    function uNameTest(){
+
+      let name = prompt("enter name");
+      acceptUsername(name);
+    }
+
     function clearChatBar(){
       $("#chatbar").val('');
     }

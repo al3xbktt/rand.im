@@ -47,13 +47,12 @@ var findLonePeer = function(socket) {
   }
 
   else{ 
-    console.log(socket.id + " pushed into queue with username: " + socket.Username);
+    console.log(socket.id + " pushed into queue with username: " + socket.userName);
     queue.push(socket);
     inQueue = true;
     socket.emit('loading', inQueue);
     console.log("\ncurrent queue:");
     printArray(queue);
-
   }
 };
 
@@ -101,7 +100,6 @@ io.on('connection', (socket) => {
     socket.broadcast.to(room).emit('disconnected');
     allUsers[socket.id] = null;
     console.log("Due to Disconnect, queue is now:")
-    
   });
 
   socket.on("waiting", () => {
@@ -124,6 +122,11 @@ io.on('connection', (socket) => {
       socket.broadcast.to(room).emit('loading',data);
     if (!data)
       socket.broadcast.to(room).emit('loading',data);
+  });
+
+  socket.on('setUsername',(data) =>{
+    socket.data.userName = data;
+    names[socket.id] = data;
   });
 
 });
