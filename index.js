@@ -7,9 +7,18 @@ const io = require('socket.io')(http)
 app.use("/public", express.static(__dirname + '/public'));
 app.use(cors());
 
-app.get('/', (req, res) => {
+app.get('/name', (req, res) => {
   res.sendFile(__dirname + '/Userpage.html');
 });
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/Landingpage.html');
+});
+
+app.get('/privacypolicy', (req, res) => {
+  res.sendFile(__dirname + '/privacypolicy.html');
+});
+
 
 http.listen(PORT, 5001, () => {
   console.log(`Listening to ${PORT}`);
@@ -47,7 +56,7 @@ var findLonePeer = function(socket) {
   }
 
   else{ 
-    console.log(socket.id + " pushed into queue with username: " + socket.userName);
+    console.log(socket.id + " pushed into queue with username: " + names[socket.id]);
     queue.push(socket);
     inQueue = true;
     socket.emit('loading', inQueue);
@@ -80,24 +89,22 @@ io.on('connection', (socket) => {
   
   socket.on('reroll', () => {
     var room = rooms[socket.id];
-    socket.broadcast.to(room).emit('chatEnd');
+    socket.broadcast.to(room).emit('chatEnd',names[socket.id]);
     var peerID = room.split('#');
     peerID = peerID[0] === socket.id ? peerID[1] : peerID[0];
     socket.leave(room);
+    socket.broadcast.to(room).emit('rerolled',names[socket.id]);
     console.log(socket.id + " hit reroll!");
-    // add both current and peer to the queue unless the peer is disconnected
+    // add current to the queue 
     findLonePeer(socket);
-    if (allUsers[peerID] != null){
-      findLonePeer(allUsers[peerID]);
-    }
     });
 
   // disconnect
   socket.on("disconnect", () => {
     var room = rooms[socket.id];
-    socket.broadcast.to(room).emit('chatEnd');
+    socket.broadcast.to(room).emit('chatEnd',names[socket.id]);
     console.log(socket.id + " disconnected.");
-    socket.broadcast.to(room).emit('disconnected');
+    socket.broadcast.to(room).emit('disconnected',names[socket.id]);
     allUsers[socket.id] = null;
     console.log("Due to Disconnect, queue is now:")
   });

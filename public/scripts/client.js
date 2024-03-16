@@ -15,29 +15,37 @@ socket.on('chatStart', (data) => {
     room = data.room;
     peer = data.name;
     introduce(peer);
+    setResponder(peer);
 });
 
-socket.on('chatEnd', () => {
+socket.on('chatEnd', (data) => {
     socket.leave(room);
     room = '';  
-    leaveRoom("test");
+    leaveRoom(data);
     textAbility(false);
-
-});
-
-socket.on ('disconnect', (data) => {
-
-    console.log("connection terminated");
-
-});
-
-socket.on ('disconnected', (data) => {
-
-    textAbility(false);
-    leaveRoom("test");
     socket.emit("waiting");
 
+});
 
+socket.on('disconnect', (data) => {
+
+    console.log("connection terminated");
+    textAbility(false);
+    connected = false;
+});
+
+socket.on('disconnected', (data) => {
+
+    textAbility(false);
+    leaveRoom(data);
+    socket.emit("waiting");
+});
+
+socket.on('rerolled', (data) => {
+
+    textAbility(false);
+    leaveRoom(data);
+    socket.emit("waiting");
 });
 
 socket.on('chatMessage', (message) => {
@@ -56,7 +64,7 @@ socket.on('loading', (data) => {
         showModal();
         textAbility(false);
     }
-    });
+});
 
 function emitMessage(text) {
 
@@ -84,5 +92,5 @@ function reroll(){
 function acceptUsername(name){
 
     socket.emit('setUsername',name);
-
+    setUser(name);
 };

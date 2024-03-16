@@ -66,33 +66,30 @@ function writeMessage(message, ownMessage) {
   };
   
   //functionality = pull the other user's 
-  function setResponder() {
-    let responder = prompt("WIP SET RESPONDER NAME").toUpperCase();
+  function setResponder(name) {
+    name=name.toUpperCase();
     let length=8;
-    if (responder.length <=10){
-      $("#rUser").html(responder);
-      $("#rUser").attr('title', responder);
+    if (name.length <=10){
+      $("#rUser").html(name);
+      $("#rUser").attr('title', name);
     }
     else{
-      $("#rUser").html(responder.slice(0,length) + "...")
-      $("#rUser").attr('title', responder);
+      $("#rUser").html(name.slice(0,length) + "...")
+      $("#rUser").attr('title', name);
       }
     };
 
   //functionality = pull the client's username and set their username as it
-  function setUser() {
-    let queryString = window.location.search;
-    let urlParam = new URLSearchParams(queryString);
-    let user = urlParam.get('name');
-    user = user.toUpperCase();
+  function setUser(name) {
+    name = name.toUpperCase();
     let length=8;
-    if (user.length <=10){
-      $("#uName").html(user);
-      $("#uName").attr('title', user);
+    if (name.length <=10){
+      $("#uName").html(name);
+      $("#uName").attr('title', name);
     }
     else{
-      $("#uName").html(user.slice(0,length) + "...");
-      $("#uName").attr('title', user);
+      $("#uName").html(name.slice(0,length) + "...");
+      $("#uName").attr('title', name);
       }
     };
 
