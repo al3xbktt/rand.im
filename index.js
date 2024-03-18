@@ -110,7 +110,9 @@ io.on('connection', (socket) => {
     socket.broadcast.to(room).emit('disconnected',names[socket.id]);
     allUsers[socket.id] = null;
     rooms[socket.id] = null;
-    console.log("Due to Disconnect, queue is now:")
+    removeFromQueue(socket);
+    console.log("Due to Disconnect, queue is now:");
+    printArray(queue);
   });
 
   socket.on("waiting", () => {
@@ -149,4 +151,12 @@ function printArray(array){
     console.log(x.id + '\n');
   });
 
+}
+
+function removeFromQueue(socket){
+
+  var index = queue.indexOf(socket);
+  if (index != -1){
+    queue.splice(index,1);
+  }
 }
