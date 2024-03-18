@@ -90,11 +90,14 @@ io.on('connection', (socket) => {
   socket.on('reroll', () => {
     var room = rooms[socket.id];
     socket.broadcast.to(room).emit('chatEnd',names[socket.id]);
+    if (room!=null){
     var peerID = room.split('#');
     peerID = peerID[0] === socket.id ? peerID[1] : peerID[0];
     socket.leave(room);
     socket.broadcast.to(room).emit('rerolled',names[socket.id]);
+    rooms[socket.id] = null;
     console.log(socket.id + " hit reroll!");
+    }
     // add current to the queue 
     findLonePeer(socket);
     });
@@ -106,6 +109,7 @@ io.on('connection', (socket) => {
     console.log(socket.id + " disconnected.");
     socket.broadcast.to(room).emit('disconnected',names[socket.id]);
     allUsers[socket.id] = null;
+    rooms[socket.id] = null;
     console.log("Due to Disconnect, queue is now:")
   });
 
@@ -113,6 +117,7 @@ io.on('connection', (socket) => {
     var room = rooms[socket.id];
     console.log(socket.id + " is alone, waiting on reroll");
     socket.leave(room);
+    rooms[socket.id] = null;
   });
 
   socket.on('isTyping',(data)=>{
