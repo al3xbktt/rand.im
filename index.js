@@ -11,17 +11,11 @@ let connectedUsers = 0; // Counter for connected users
 
 // Increment the connectedUsers counter on each connection
 io.on('connection', (socket) => {
-  connectedUsers++;
-  console.log('user #' + socket.id +' connected. Total users: ' + connectedUsers);
-
   socket.on('disconnect', () => {
-    connectedUsers--;
-    console.log('user #' + socket.id +' disconnected. Total users: ' + connectedUsers);
-    io.emit('connectedUsersCount', connectedUsers); // Emit the updated count
+   
   });
 
   // Send the initial count when a new user connects
-  io.emit('connectedUsersCount', connectedUsers);
 });
 
 // Endpoint to get the count of connected users
@@ -87,9 +81,12 @@ var findLonePeer = function(socket) {
   }
 };
 
+
 io.on('connection', (socket) => {
-  console.log('user #' + socket.id +' connected');
-  
+  connectedUsers++;
+  console.log('user #' + socket.id +' connected. Total users: ' + connectedUsers);
+
+
   socket.on('login', (data) => {
     names[socket.id] = data.username;
     allUsers[socket.id] = socket;
@@ -126,15 +123,15 @@ io.on('connection', (socket) => {
 
   // disconnect
   socket.on("disconnect", () => {
+    connectedUsers--;
+    console.log('user #' + socket.id +' disconnected. Total users: ' + connectedUsers);
+    io.emit('connectedUsersCount', connectedUsers); // Emit the updated count
     var room = rooms[socket.id];
     socket.broadcast.to(room).emit('chatEnd',names[socket.id]);
-    console.log(socket.id + " disconnected.");
     socket.broadcast.to(room).emit('disconnected',names[socket.id]);
     allUsers[socket.id] = null;
     rooms[socket.id] = null;
     removeFromQueue(socket);
-    console.log("Due to Disconnect, queue is now:");
-    printArray(queue);
   });
 
   socket.on("waiting", () => {
@@ -164,6 +161,8 @@ io.on('connection', (socket) => {
     socket.data.userName = data;
     names[socket.id] = data;
   });
+
+  io.emit('connectedUsersCount', connectedUsers);
 
 });
 
