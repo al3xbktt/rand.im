@@ -3,9 +3,31 @@ const express = require('express');
 const http = require('http').createServer(app);
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
-const io = require('socket.io')(http)
+const io = require('socket.io')(http);
 app.use("/public", express.static(__dirname + '/public'));
 app.use(cors());
+
+let connectedUsers = 0; // Counter for connected users
+
+// Increment the connectedUsers counter on each connection
+io.on('connection', (socket) => {
+  connectedUsers++;
+  console.log('user #' + socket.id +' connected. Total users: ' + connectedUsers);
+
+  socket.on('disconnect', () => {
+    connectedUsers--;
+    console.log('user #' + socket.id +' disconnected. Total users: ' + connectedUsers);
+    io.emit('connectedUsersCount', connectedUsers); // Emit the updated count
+  });
+
+  // Send the initial count when a new user connects
+  io.emit('connectedUsersCount', connectedUsers);
+});
+
+// Endpoint to get the count of connected users
+app.get('/connectedUsers', (req, res) => {
+  res.json({ count: connectedUsers });
+});
 
 app.get('/name', (req, res) => {
   res.sendFile(__dirname + '/Userpage.html');

@@ -32,6 +32,35 @@
     <a href="name" class="btn btn-primary" id="custom-button">SET DISPLAY NAME</a>
   </div>
     
+  <div id="connectedUsersCount">Number of users connected: Loading...</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+      const socket = io();
+
+      // Function to update the count of connected users
+      function updateConnectedUsersCount(count) {
+          const countElement = document.getElementById('connectedUsersCount');
+          countElement.textContent = 'Number of users connected: ' + count;
+      }
+
+      // Listen for the connectedUsersCount event emitted by the server
+      socket.on('connectedUsersCount', count => {
+          updateConnectedUsersCount(count);
+      });
+
+      // Call the function to fetch and display connected users when the page loads
+      fetch('/connectedUsers')
+      .then(response => response.json())
+      .then(data => {
+          updateConnectedUsersCount(data.count);
+      })
+      .catch(error => {
+          console.error('Error fetching connected users:', error);
+      });
+  </script>
+   
+
 <!-- Footer Section -->
 
 </body>
