@@ -112,18 +112,32 @@ function writeMessage(message, ownMessage) {
     }
 
     function introduce(name){
-
-      var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
-      text-align:center;"><p>You're now chatting with ` + name + `, say Hi!</p><hr style="color:#fff;height:1vh;"></div>`;
-
+      let length = 20;
+      if (name.length > length){
+        name = name.slice(0,length);
+        var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+        text-align:center;"><p>You're now chatting with ` + name + `..., say Hi!</p><hr style="color:#fff;height:1vh;"></div>`;
+      }
+      else{
+        var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+        text-align:center;"><p>You're now chatting with ` + name + `, say Hi!</p><hr style="color:#fff;height:1vh;"></div>`;
+      }
       $("#chatroom").html($("#chatroom").html() + text);
 
     };
 
     function leaveRoom(name){
+      let length = 20;
+      if (name.length > length){
+        name = name.slice(0,length);
       var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+      text-align:center;"><p>` + name + `... has left, hit "Reroll!" to find a new partner!</p></div>`;
+      }
+      else {
+        var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
       text-align:center;"><p>` + name + ` has left, hit "Reroll!" to find a new partner!</p></div>`;
-
+        
+      }
       $("#chatroom").html($("#chatroom").html() + text);
 
     }

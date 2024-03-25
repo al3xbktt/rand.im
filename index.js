@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
 
 
   socket.on('login', (data) => {
-    names[socket.id] = data.username;
+    names[socket.id] = data;
     allUsers[socket.id] = socket;
     findLonePeer(socket);
     console.log(socket.id + " logged in");

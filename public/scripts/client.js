@@ -4,8 +4,10 @@ var userName = 'cyb3rflare';
 var room = '';
 
 socket.on('connect', (data) =>{
+    var userName= generateUsername();
     connected = true;
-    if (userName) socket.emit('login', {"username :" : userName});
+    if (userName) socket.emit('login',userName);
+    setUser(userName);
 });
 
 socket.on('chatStart', (data) => {
@@ -87,6 +89,11 @@ function reroll(){
         socket.emit('reroll');
         console.log(room);
     }
+};
+
+function generateUsername(){
+    var name = 'User#' + Math.floor((Math.random() * 9999) + 1);
+    return name;
 };
 
 function acceptUsername(name){
