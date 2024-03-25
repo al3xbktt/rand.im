@@ -28,11 +28,12 @@
 
   <!-- This code creates a splash text and a button for setting a display name. The button links to a chatroom page.-->
   <div class="container d-flex flex-column align-items-center justify-content-center vh-100">
-    <div id="customtext" class="text-center text-stroke" style="width:40%;"><h1>Roll the Dice and Find a Person to Chat With!</h1></div>
+    <div id="bigsplash" class="text-center" >ROL<span style="letter-spacing:-1vw;">L </span>THE<span style="letter-spacing:-1vw"> </span><span style="color:white">DICE</span></div>
+    <div id="customtext" class="text-center" style="width:50%;">Chat with People Around the World!</div>
     <a href="name" class="btn btn-primary" id="custom-button">SET DISPLAY NAME</a>
+    <div id="connectedUsersCount" style="color:white">Number of users currently chatting: Loading...!</div>
   </div>
     
-  <div id="connectedUsersCount">Number of users connected: Loading...</div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -41,7 +42,7 @@
       // Function to update the count of connected users
       function updateConnectedUsersCount(count) {
           const countElement = document.getElementById('connectedUsersCount');
-          countElement.textContent = 'Number of users connected: ' + count;
+          countElement.textContent = 'Number of users currently chatting: ' + (count-1) + '!';
       }
 
       // Listen for the connectedUsersCount event emitted by the server

@@ -18,8 +18,17 @@
 #customtext {
   color: #D84A68;
   font-weight: bold;
-  font-size: 2.5vw; /* Set a specific font size */
+  font-size: 1.5vw; /* Set a specific font size */
   margin-bottom: 20px; /* Adds some space between the text and the button */
+}
+
+#bigsplash {
+  color: #D84A68;
+  font-weight:900;
+  font-size:10vw;
+  margin-top:-10vw;
+  letter-spacing:-0.5vw;
+  font-family:arial;
 }
 
 .text-stroke {
