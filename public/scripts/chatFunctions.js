@@ -1,5 +1,6 @@
 var timeout;
 
+//functionality = get the current time and write it into a readable format
 function getTime() {
   var now = new Date(Date.now());
   var hours = now.getHours();
@@ -11,6 +12,7 @@ function getTime() {
   return time
 }
 
+//functionality = when the user hits enter and only enter, trigger the send button
 $('#chatbar').on( "keydown", function(e) {
   if(e.which == 13 && !e.shiftKey) {
    $("#submitButton").trigger("click");
@@ -20,6 +22,7 @@ $('#chatbar').on( "keydown", function(e) {
 } );
 
 
+//functionality = on keypress, emit that the user is typing to the other and set a timeout
 $('#chatbar').on( "keypress", function() {
     emitTyping(true);
     timeout = setTimeout(timeoutFunction,10000);
@@ -63,10 +66,10 @@ function writeMessage(message, ownMessage) {
   $("#chatroom").html($("#chatroom").html() + text);
   $("#chatbar").scrollTop($("#chatbar")[0].scrollHeight);
   $("#chatroom").stop().animate({ scrollTop: $("#chatroom")[0].scrollHeight}, 1000);
-  };
+};
   
-  //functionality = pull the other user's 
-  function setResponder(name) {
+//functionality = pull the other user's 
+function setResponder(name) {
     name=name.toUpperCase();
     let length=8;
     if (name.length <=10){
@@ -77,10 +80,10 @@ function writeMessage(message, ownMessage) {
       $("#rUser").html(name.slice(0,length) + "...")
       $("#rUser").attr('title', name);
       }
-    };
+};
 
-  //functionality = pull the client's username and set their username as it
-  function setUser(name) {
+//functionality = pull the client's username and set their username as it
+function setUser(name) {
     name = name.toUpperCase();
     let length=8;
     if (name.length <=10){
@@ -91,72 +94,79 @@ function writeMessage(message, ownMessage) {
       $("#uName").html(name.slice(0,length) + "...");
       $("#uName").attr('title', name);
       }
-    };
+};
 
-    function clearChat() {
-      $('#chatroom').empty();
-    };
+//functionality = clear chatroom
+function clearChat() {
+    $('#chatroom').empty();
+};
     
-    function timeoutFunction() {
+//functionality = emit the timeout from typing
+function timeoutFunction() {
       emitTyping(false);
-    };
+};
 
-    function showModal(){
-
-      $("#load-modal").attr("style","display:block");
-    }
+//functionality = show the loading modal
+function showModal(){
+  $("#load-modal").attr("style","display:block");
+}
     
-    function hideModal(){
+//functionality = hide the loading modal
+function hideModal(){
+  $("#load-modal").attr("style","display:hidden");
+}
 
-      $("#load-modal").attr("style","display:hidden");
-    }
+//functionality = write introduction to other user with username
+function introduce(name){
+  let length = 20;
+  if (name.length > length){
+    name = name.slice(0,length);
+    var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+    text-align:center;"><p>You're now chatting with ` + name + `..., say Hi!</p><hr style="color:#fff;height:1vh;"></div>`;
+  }
+  else{
+    var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+    text-align:center;"><p>You're now chatting with ` + name + `, say Hi!</p><hr style="color:#fff;height:1vh;"></div>`;
+  }
+  
+  $("#chatroom").html($("#chatroom").html() + text);
 
-    function introduce(name){
-      let length = 20;
-      if (name.length > length){
-        name = name.slice(0,length);
-        var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
-        text-align:center;"><p>You're now chatting with ` + name + `..., say Hi!</p><hr style="color:#fff;height:1vh;"></div>`;
-      }
-      else{
-        var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
-        text-align:center;"><p>You're now chatting with ` + name + `, say Hi!</p><hr style="color:#fff;height:1vh;"></div>`;
-      }
-      $("#chatroom").html($("#chatroom").html() + text);
+};
 
-    };
+//functionality = write to the chatroom div that the remaining user's peer has left the chatroom
+function leaveRoom(name){
+  let length = 20;
+  if (name.length > length){
+    name = name.slice(0,length);
+    var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+    text-align:center;"><p>` + name + `... has left, hit "Reroll!" to find a new partner!</p></div>`;
+  }
+  else {
+    var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
+    text-align:center;"><p>` + name + ` has left, hit "Reroll!" to find a new partner!</p></div>`; 
+  }
 
-    function leaveRoom(name){
-      let length = 20;
-      if (name.length > length){
-        name = name.slice(0,length);
-      var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
-      text-align:center;"><p>` + name + `... has left, hit "Reroll!" to find a new partner!</p></div>`;
-      }
-      else {
-        var text = `<div class="center" style="color:#fff; margin-top:2vw; width:auto; 
-      text-align:center;"><p>` + name + ` has left, hit "Reroll!" to find a new partner!</p></div>`;
-        
-      }
-      $("#chatroom").html($("#chatroom").html() + text);
+  $("#chatroom").html($("#chatroom").html() + text);
 
-    }
+};
 
-    function textAbility(check){
+//functionality = remove current users typing ability
+function textAbility(check){
 
-      if (check)
-        $('#chatbar').prop("disabled",false);
-      else
-        $('#chatbar').prop("disabled",);
+  if (check)
+    $('#chatbar').prop("disabled",false);
+  else
+    $('#chatbar').prop("disabled",);
+  
+};
 
+//functionality = WIP USERNAME TESTING FUNCTION. TESTING PURPOSES ONLY REMOVE BEFORE PUTTING IN CLOUD
+function uNameTest(){
 
-    }
-
-    function uNameTest(){
-
-      let name = prompt("enter name");
-      acceptUsername(name);
-    }
+  let name = prompt("enter name");
+  acceptUsername(name);
+  
+}
 
     function clearChatBar(){
       $("#chatbar").val('');
