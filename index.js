@@ -165,6 +165,10 @@ app.get('/name', (req, res) => {
   res.sendFile(__dirname + '/Userpage.html');
 });
 
+app.get('/profiles', (req, res) => {
+  res.sendFile(__dirname + '/profiles.html');
+});
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/Landingpage.html');
 });
