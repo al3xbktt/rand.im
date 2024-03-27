@@ -179,7 +179,7 @@
     width: 25%; /* Could be more or less, depending on screen size */
   }
 
-  ::-webkit-scrollbar
+  .chatroom::-webkit-scrollbar
 {
 	border-radius: 10px;
 	background-color: rgba(0,0,0,0);
@@ -187,7 +187,7 @@
   
 }
 
-  ::-webkit-scrollbar-thumb
+.chatroom::-webkit-scrollbar-thumb
 {
 	border-radius: 10px;
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);

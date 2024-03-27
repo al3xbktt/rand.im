@@ -1,11 +1,144 @@
 const app = require('express')();
 const express = require('express');
+const bodyParser = require("body-parser");
 const http = require('http').createServer(app);
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const io = require('socket.io')(http);
+const Pool = require('pg').Pool;
+var session = require('express-session')
+
+
+const sessionMiddleware = session({
+  secret: "471e296e02d268b260756579d15e0bd7",
+  resave: true,
+  saveUninitialized: true,
+});
+
+app.use(sessionMiddleware);
+app.use(bodyParser.urlencoded({extended: true}));
 app.use("/public", express.static(__dirname + '/public'));
 app.use(cors());
+
+//database connection
+const pool = new Pool({
+  user:'postgres',
+  host:'localhost',
+  database: 'rand.im',
+  password: 'arbecket',
+  port: '5432'
+
+});
+
+app.post("/api/login/create", (req,res,next) => {
+
+ createUser(req,res,next);
+
+});
+
+app.post("/api/login/check", (req,res,next) => {
+
+  checkUser(req,res,next);
+  
+ });
+
+ app.post("/api/login/authenticate", (req,res,next) => {
+
+  authenticateUser(req,res,next);
+  
+ });
+
+const insertUser = "INSERT INTO users (username,password) VALUES ($1,crypt( $2, gen_salt('bf')))"
+const checkSQL = "SELECT EXISTS (SELECT 1 FROM users WHERE username = $1) AS it_does_exist"; 
+const authenticate = "SELECT EXISTS (SELECT 1 FROM users WHERE username = $1 AND password=crypt( $2, password)) AS it_does_exist";
+
+
+
+const authenticateUser = async (req, res, next) => {
+  const { username,password } = req.body;
+  try {
+    const checkIn = await pool.query(authenticate, [
+      username,
+      password
+    ]);
+    var check = Object.values(checkIn.rows[0])[0] != false
+    if (check){
+      console.log("User " + username + " passed authentication");
+    res
+      .status(201)
+      .json(check);
+    }
+    else {
+      console.log("User " + username + " failed authentication");
+      res
+        .status(201)
+        .json(check);
+      }
+    } catch (err) {
+      console.error(err.message);
+      const error = new Error("Something Went Wrong!");
+      error.status = 500;
+      next(error);
+    }
+};
+
+
+const checkUser = async (req, res, next) => {
+  const { username } = req.body;
+
+  try {
+    const checkIn = await pool.query(checkSQL, [
+      username,
+    ]);
+    var check = Object.values(checkIn.rows[0])[0] != false
+    if (check){
+      console.log("User " + username + " does exist");
+    res
+      .status(201)
+      .json(check);
+    }
+    else {
+      console.log("User " + username + " does not exist");
+      res
+        .status(201)
+        .json(check);
+      }
+    } catch (err) {
+      console.error(err.message);
+      const error = new Error("Something Went Wrong!");
+      error.status = 500;
+      next(error);
+    }
+};
+
+
+const createUser = async (req, res, next) => {
+  const { username,password } = req.body;
+
+  try {
+    const create = await pool.query(insertUser, [
+      username,
+      password,
+    ]);
+
+    res
+      .status(201)
+      .json({ message: "User Created Successfully!", user: create.rows[0] });
+  } catch (err) {
+    // If UNIQUE constraint is violated
+    if (err.code == "23505") {
+      console.error(err.message);
+      const error = new Error("Username Already Exists!");
+      error.status = 400;
+      next(error);
+    } else {
+      console.error(err.message);
+      const error = new Error("Something Went Wrong!");
+      error.status = 500;
+      next(error);
+    }
+  }
+};
 
 let connectedUsers = 0; // Counter for connected users
 
@@ -22,6 +155,11 @@ io.on('connection', (socket) => {
 app.get('/connectedUsers', (req, res) => {
   res.json({ count: connectedUsers });
 });
+
+app.get('/alreadyExists', (req,res) => {
+  res.json({ alreadyExists: check});
+});
+
 
 app.get('/name', (req, res) => {
   res.sendFile(__dirname + '/Userpage.html');
@@ -56,7 +194,7 @@ var findLonePeer = function(socket) {
 
   if (queue.length != 0){
     // there is someone in queue
-    var peer = queue.pop();
+    var peer = queue.pop(); 
     var room = socket.id + '#' + peer.id;
     // join peers into one room
     peer.join(room);
@@ -181,3 +319,4 @@ function removeFromQueue(socket){
     queue.splice(index,1);
   }
 }
+

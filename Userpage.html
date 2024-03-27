@@ -7,6 +7,7 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/public/styles/user.css">
     <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico">
 </head>
@@ -23,27 +24,26 @@
                 <a class="nav-link" href="privacypolicy">Privacy Policy</a>
               </li>
             </ul>
+            <a type = "button" class="btn rounded ms-auto" id="signin" href="/name" data-bs-toggle="button" style="background-color:#bf3647; color:#fff; margin-right:10px;"><i class="bi bi-person" style=" font-size:large;"></i></a>  
     </header> 
 
     <!-- This is a container with an image, input field, and button. They are stacked vertically and centered in the middle of the viewport.-->
     <div class="container d-flex flex-column align-items-center justify-content-center" style="height: 90vh;">
       <img src="/public/images/user.png" alt="User" id="userImage">
-      <input type="text" style="color:white;" id="nameInput" placeholder="Type your name here...">
-      <button type="button" id="custom-button" style="margin-top:3vh" class="btn btn-primary">Join</button>
+      <div id="alreadyRegistered" style="color:white"></div>
+      <div id="registration" style="color:white"></div>
+      <!---This is a text area for inputting usernames and possibly passwords-->
+      <div id="inputArea">
+        <input type="text" style="color:white;" id="nameInput" placeholder="Type your name here...">
+      </div>
+      <div>
+      <button type="button" id="custom-button" style="margin-top:3vh;" class="btn btn-primary">Join</button>
+      </div>
+      <button type = "button" class="btn rounded ms-auto" id="register" onclick="registration($('#nameInput').val(),this)" data-bs-toggle="button" style="height:50px; background-color:#bf3647; color:#fff; margin-right:10px;"><i class="bi bi-pencil" style=" font-size:large;"></i></button>
+
     </div>
     
-    <!-- For the textbox can have a popup  and take you to the next page-->
-    <script>
-      document.getElementById('custom-button').addEventListener('click', function() {
-        const name = document.getElementById('nameInput').value;
-        if (name) {
-          alert(`Welcome: ${name}`);
-          window.location.href = "chatroom";
-        } else {
-          alert('Please type your name before joining.');
-        }
-      });
-    </script>
-
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>
+  <script src="./public/scripts/userFunctions.js" type="text/javascript"></script>
 </body>
 </html>

@@ -4,10 +4,12 @@
     "description": "Random Chat using Sockets",
     "type": "commonjs",
     "dependencies": {
+        "body-parser": "^1.20.2",
         "cors": "^2.8.5",
         "express": "^4.18.3",
+        "express-session": "^1.18.0",
         "jquery": "^3.7.1",
+        "pg": "^8.11.3",
         "socket.io": "^4.7.4"
-        
     }
 }

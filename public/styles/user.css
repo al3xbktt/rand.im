@@ -31,6 +31,22 @@ The container is designed to display its children (an image, a textbox, and a bu
   width: 500px; /* Set a specific width */
 }
 
+
+/*This is for the password textbox*/
+#passInput {
+  position: relative;
+  font-weight: bold;
+  font-size: 2.5vw;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 30px;
+  text-align: center;
+  background-color: rgba(211, 211, 211, 0.1);
+  transition: background-color 0.3s ease;
+  width: 500px; /* Set a specific width */
+}
+
 /*This is for the Join button*/
 #custom-button {
   background-color: #D84A68;
