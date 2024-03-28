@@ -4,7 +4,10 @@ var userName = 'cyb3rflare';
 var room = '';
 
 socket.on('connect', (data) =>{
-    var userName= generateUsername();
+    if (socket.userName == undefined)
+        var userName= generateUsername();
+    else
+        var userName = socket.username;
     connected = true;
     if (userName) socket.emit('login',userName);
     setUser(userName);
@@ -18,6 +21,7 @@ socket.on('chatStart', (data) => {
     peer = data.name;
     introduce(peer);
     setResponder(peer);
+    setUser(data.myname);
 });
 
 socket.on('chatEnd', (data) => {

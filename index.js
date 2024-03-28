@@ -9,11 +9,11 @@ const Pool = require('pg').Pool;
 var session = require('express-session')
 
 
-const sessionMiddleware = session({
+
+var sessionMiddleware = session({
   secret: "471e296e02d268b260756579d15e0bd7",
   resave: true,
-  saveUninitialized: true,
-});
+  saveUninitialized: true});
 
 app.use(sessionMiddleware);
 app.use(bodyParser.urlencoded({extended: true}));
@@ -43,8 +43,15 @@ app.post("/api/login/check", (req,res,next) => {
  });
 
  app.post("/api/login/authenticate", (req,res,next) => {
-
+  const { username,password } = req.body;
   authenticateUser(req,res,next);
+  
+  req.session.save(() => {
+    req.session.logged_in = true;
+    req.session.username =  username;
+  
+  });
+  console.log(req.session.username);
   
  });
 
@@ -66,8 +73,9 @@ const authenticateUser = async (req, res, next) => {
       console.log("User " + username + " passed authentication");
     res
       .status(201)
-      .json(check);
+      res.json({ user: username, message: 'You are now logged in!' });
     }
+
     else {
       console.log("User " + username + " failed authentication");
       res
@@ -162,7 +170,12 @@ app.get('/alreadyExists', (req,res) => {
 
 
 app.get('/name', (req, res) => {
+  if (req.session.user == null){
   res.sendFile(__dirname + '/Userpage.html');
+  }
+  else {
+    res.redirect('/');
+  }
 });
 
 app.get('/profiles', (req, res) => {
@@ -170,7 +183,12 @@ app.get('/profiles', (req, res) => {
 });
 
 app.get('/', (req, res) => {
+  if (req.session.user == null){
+    res.redirect('/name');
+    } 
+  else{
   res.sendFile(__dirname + '/Landingpage.html');
+  }
 });
 
 app.get('/privacypolicy', (req, res) => {
@@ -207,8 +225,8 @@ var findLonePeer = function(socket) {
     rooms[peer.id] = room;
     rooms[socket.id] = room;
     // exchange names
-    peer.emit('chatStart', {name: names[socket.id],'room':room});
-    socket.emit('chatStart', {name: names[peer.id],'room':room});
+    peer.emit('chatStart', {name: names[socket.id],'room':room,myname: names[peer.id]});
+    socket.emit('chatStart', {name: names[peer.id],'room':room,myname: names[socket.id]});
     console.log(socket.id + " matched with " + peer.id + " in room: " + room );
     inQueue = false;
   }
@@ -223,14 +241,25 @@ var findLonePeer = function(socket) {
   }
 };
 
+io.engine.use(sessionMiddleware);
+
 
 io.on('connection', (socket) => {
   connectedUsers++;
-  console.log('user #' + socket.id +' connected. Total users: ' + connectedUsers);
+  if (socket.request.session.username != undefined){
+    console.log('user #' + socket.id +' connected with username ' + " with username " + socket.request.session.username +  '. Total users: ' + connectedUsers);
+    socket.userName = socket.request.session.username;
+  }
 
+  else {
+    console.log('user #' + socket.id +' connected. Total users: ' + connectedUsers );
+  }
 
   socket.on('login', (data) => {
-    names[socket.id] = data;
+    if (socket.request.session.username)
+      names[socket.id] = socket.request.session.username;
+    else
+      names[socket.id] = data;
     allUsers[socket.id] = socket;
     findLonePeer(socket);
     console.log(socket.id + " logged in");
@@ -323,4 +352,5 @@ function removeFromQueue(socket){
     queue.splice(index,1);
   }
 }
+
 
