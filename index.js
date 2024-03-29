@@ -170,7 +170,7 @@ app.get('/alreadyExists', (req,res) => {
 
 
 app.get('/name', (req, res) => {
-  if (req.session.user == null){
+  if (req.session.username == null){
   res.sendFile(__dirname + '/Userpage.html');
   }
   else {
@@ -183,12 +183,7 @@ app.get('/profiles', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  if (req.session.user == null){
-    res.redirect('/name');
-    } 
-  else{
   res.sendFile(__dirname + '/Landingpage.html');
-  }
 });
 
 app.get('/privacypolicy', (req, res) => {
@@ -210,12 +205,14 @@ var rooms = [];
 var names = {};
 var allUsers = {};
 
+
+
 var findLonePeer = function(socket) {
 
   var inQueue;
 
-  if (queue.length != 0){
-    // there is someone in queue
+  if (queue.length != 0 && queue[0] != socket){
+    // there is someone in queue other than you
     var peer = queue.pop(); 
     var room = socket.id + '#' + peer.id;
     // join peers into one room
@@ -231,6 +228,9 @@ var findLonePeer = function(socket) {
     inQueue = false;
   }
 
+  else if (queue.length > 0 && queue[0] == socket){
+    removeDuplicates(queue);
+  }
   else{ 
     console.log(socket.id + " pushed into queue with username: " + names[socket.id]);
     queue.push(socket);
@@ -353,4 +353,9 @@ function removeFromQueue(socket){
   }
 }
 
+function removeDuplicates(array){
 
+  array = array.filter( function( item, index, inputArray ) {
+    return inputArray.indexOf(item) == index;
+  });
+}
