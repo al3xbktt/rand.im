@@ -160,14 +160,6 @@ function textAbility(check){
   
 };
 
-//functionality = WIP USERNAME TESTING FUNCTION. TESTING PURPOSES ONLY REMOVE BEFORE PUTTING IN CLOUD
-function uNameTest(){
-
-  let name = prompt("enter name");
-  acceptUsername(name);
-  
-}
-
-    function clearChatBar(){
+function clearChatBar(){
       $("#chatbar").val('');
-    }
+}
