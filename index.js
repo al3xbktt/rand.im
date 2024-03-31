@@ -7,7 +7,8 @@ const PORT = process.env.PORT || 5000;
 const io = require('socket.io')(http);
 const Pool = require('pg').Pool;
 var session = require('express-session')
-
+const { PeerServer } = require('peer');
+const peerServer = PeerServer({port:9000,path:'/myapp'});
 
 
 var sessionMiddleware = session({
@@ -265,6 +266,11 @@ io.on('connection', (socket) => {
     console.log(socket.id + " logged in");
   });
 
+  // getPeerID
+  socket.on("peerID", (data) => {
+    var room = rooms[socket.id];
+    socket.broadcast.to(room).emit('videoStart',data);
+  });
 
   // chat message
   socket.on("chatMessage", (message) => {
@@ -277,14 +283,14 @@ io.on('connection', (socket) => {
     }
   });
   
-  socket.on('reroll', () => {
+  socket.on('reroll', (data) => {
     var room = rooms[socket.id];
     socket.broadcast.to(room).emit('chatEnd',names[socket.id]);
     if (room!=null){
     var peerID = room.split('#');
     peerID = peerID[0] === socket.id ? peerID[1] : peerID[0];
     socket.leave(room);
-    socket.broadcast.to(room).emit('rerolled',names[socket.id]);
+    socket.broadcast.to(room).emit('rerolled',{name: names[socket.id], id:data});
     rooms[socket.id] = null;
     console.log(socket.id + " hit reroll!");
     }

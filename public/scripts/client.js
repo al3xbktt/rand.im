@@ -2,7 +2,40 @@ var socket = io();
 var connected = false;
 var userName = 'cyb3rflare';
 var room = '';
+var myStream;
+var videoSwitch = true;
+var micSwitch = true;
+var currentCall;
 
+var setMyStream = function(stream){
+    myStream = stream;
+}
+
+var setMyCall = function(call){
+    currentCall = call;
+}
+
+
+navigator.mediaDevices.getUserMedia({
+
+    video: true,
+    audio: true
+
+}).then(stream => {
+    addVideoStream(myVideo,stream)
+    setMyStream(stream);
+
+    myPeer.on('call', call => {
+        call.answer(myStream);
+        const video = document.createElement('video');
+        call.on('stream',myStream => {
+            addVideoStream(video,myStream,true);
+        })
+    })
+});
+
+
+// SOCKET.IO
 socket.on('connect', (data) =>{
     if (socket.userName == undefined)
         var userName= generateUsername();
@@ -22,7 +55,15 @@ socket.on('chatStart', (data) => {
     introduce(peer);
     setResponder(peer);
     setUser(data.myname);
+    socket.emit("peerID",myPeer.id);
+    console.log(myPeer.id);
 });
+
+
+socket.on('videoStart', (data) => {
+    connectToCall(data,myStream);
+});
+
 
 socket.on('chatEnd', (data) => {
     socket.leave(room);
@@ -48,10 +89,11 @@ socket.on('disconnected', (data) => {
 });
 
 socket.on('rerolled', (data) => {
-
     textAbility(false);
-    leaveRoom(data);
+    leaveRoom(data.name);
     socket.emit("waiting");
+    disconnectFromCall(currentCall);
+    
 });
 
 socket.on('chatMessage', (message) => {
@@ -90,8 +132,7 @@ function emitTyping(data){
 
 function reroll(){
     if (connected) {
-        socket.emit('reroll');
-        console.log(room);
+        socket.emit('reroll',myPeer.id);
     }
 };
 
@@ -105,3 +146,73 @@ function acceptUsername(name){
     socket.emit('setUsername',name);
     setUser(name);
 };
+
+// PEERJS
+
+const myPeer = new Peer(undefined, {
+    host: "localhost",
+    port: 9000,
+    path: "/myapp",});
+
+    const myVideo = document.createElement('video') // Create a new video tag to show our video
+    myVideo.muted = true;
+
+function connectToCall(userId, stream){
+    console.log(userId + " " + stream);
+    const call = myPeer.call(userId,stream);
+    setMyCall(call);
+    const video = document.createElement('video'); 
+    video.setAttribute("id","userVideo");
+    call.on('stream', stream => {
+        addVideoStream(video,stream,true);
+        
+    })
+    call.on('close', () => {
+        disconnectFromCall(call);
+    })
+}
+
+function disconnectFromCall(call){
+
+    call.close();
+}
+
+function addVideoStream(video, stream, isPeer) {
+    video.srcObject = stream ;
+    video.addEventListener('loadedmetadata', () => { // Play the video as it loads
+        video.play()
+    })
+    if (!isPeer){
+    $( "#userVideo" ).empty();        
+    $( "#userVideo" ).append(video);        
+    }
+    if (isPeer){
+        $( "#peerVideo" ).empty();        
+        $( "#peerVideo" ).append(video);        
+        }
+}
+
+
+function toggleVideo(stream) {
+    if(stream != null && stream.getVideoTracks().length > 0){
+      videoSwitch = !videoSwitch;
+      if (videoSwitch == false){
+        replaceCard(true);
+      }
+      else{
+        const video = document.createElement('video');
+        addVideoStream(video,stream,false)
+      }
+        stream.getVideoTracks()[0].enabled = videoSwitch;
+    }
+  
+  }
+
+
+function stopAudioOnly(stream) {
+    stream.getTracks().forEach((track) => {
+        if (track.readyState == 'live' && track.kind === 'audio') {
+            track.stop();
+        }
+    });
+}

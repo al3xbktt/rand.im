@@ -163,3 +163,23 @@ function textAbility(check){
 function clearChatBar(){
       $("#chatbar").val('');
 }
+
+function replaceCard(isUser){
+
+  if (isUser){
+    var text = `<div class="card-body">
+    <img src="/public/images/user.png" style="border-radius: 50%; width:10vw;" class="center">
+    <center><h2 class="card-title"id="uName" style="color:#fff; font-size:2.5vw; font-weight:bold;">YOU</h2></center>
+  </div>`
+    $('#userVideo').html(text);
+  }
+  else {
+    var text = `<div class="card-body">
+    <img src="/public/images/user.png" style="border-radius: 50%; width:10vw;" class="center">
+    <center><h2 class="card-title" id="rUser" style="color:#fff; font-size:2.5vw; font-weight:bold;" data-toggle="tooltip" data-placement="bottom" title="USER#XXXXX">USER #XXXXX</h2></center>
+  </div>`
+    $('#peerVideo').html(text);
+
+  }
+
+}
