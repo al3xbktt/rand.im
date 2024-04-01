@@ -167,19 +167,41 @@ function clearChatBar(){
 function replaceCard(isUser,name){
   name = name.toUpperCase();
   if (isUser){
-    var text = `<div class="card-body">
+    var text = `
     <img src="/public/images/user.png" style="border-radius: 50%; width:10vw;" class="center">
     <center><h2 class="card-title"id="uName" style="color:#fff; font-size:2.5vw; font-weight:bold;">`+ name + `</h2></center>
-  </div>`
+  `
     $('#userVideo').html(text);
   }
   else {
-    var text = `<div class="card-body">
+    var text = `
     <img src="/public/images/user.png" style="border-radius: 50%; width:10vw;" class="center">
     <center><h2 class="card-title" id="rUser" style="color:#fff; font-size:2.5vw; font-weight:bold;" data-toggle="tooltip" data-placement="bottom">` + name  +`</h2></center>
-  </div>`
+  `
     $('#peerVideo').html(text);
 
   }
 
 }
+
+function switchMic(isUser,micSwitch){
+  if (isUser && micSwitch){
+    var text = `<h1><i class="bi bi-mic"></i></h1>`
+        $('#userMicSpot').html(text)
+  }
+  else if (isUser && !micSwitch){
+    var text = `<h1><i class="bi bi-mic-mute"></i></h1>`
+        $('#userMicSpot').html(text)
+  }
+
+  else if (!isUser && micSwitch){
+    var text = `<h1><i class="bi bi-mic"></i></h1>`
+      $('#peerMicSpot').html(text)
+  }
+
+  else if (!isUser && !micSwitch){
+    var text = `<h1><i class="bi bi-mic-mute"></i></h1>`;
+        $('#peerMicSpot').html(text)
+  }
+
+  }

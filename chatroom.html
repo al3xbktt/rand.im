@@ -39,25 +39,31 @@
       <div class="row py-3">
         <div class="col-md-3">
         <div class="row">
-          <div class="card" id="peerVideo" style="background-color:#410E25; border-radius:50px; width:30vw;">
+          <div class="card" style="background-color:#410E25; border-radius:50px; width:30vw;">
             <div class="card-body">
+              <div id="peerMicSpot" class="mic" style = "position:absolute; z-index:10;"></div>
+              <div id="peerVideo" style="height:90%">
               <img src="/public/images/user.png" style="border-radius: 50%; width:10vw;" class="center">
               <center><h2 class="card-title" id="rUser" style="color:#fff; font-size:2.5vw; font-weight:bold;" data-toggle="tooltip" data-placement="bottom" title="USER#XXXXX">USER #XXXXX</h2></center>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- USER Card (You) -->
         <div class="row py-3">
-          <div class="card" id="userVideo" style="background-color:#410E25; border-radius:50px; width:30vw;">
+          <div class="card" style="background-color:#410E25; border-radius:50px; width:30vw;">
             <div class="card-body">
+              <div id="userMicSpot" class="mic" style = "position:absolute; z-index:10;"></div>
+              <div id="userVideo" style="height:90%">
               <img src="/public/images/user.png" style="border-radius: 50%; width:10vw;" class="center">
               <center><h2 class="card-title"id="uName" style="color:#fff; font-size:2.5vw; font-weight:bold;">YOU</h2></center>
+              </div>
             </div>
           </div>
         </div>    
         <button class="btn rounded" id="reroll" type="submit" style="background-color:#D84A68; color:#fff; width:22vw; height:6.5vh; margin-left:-0.25vw;" onclick="showModal(),reroll(),disconnectFromCall(currentCall)"><i class="bi bi-dice-6" style=" font-size:large;"> Reroll!</i></button>
-        <button type = "button" class="btn rounded" id="mic" data-bs-toggle="button" style="background-color:#D84A68; color:#fff; margin-left:-0.25vw; margin-top:10px"><i class="bi bi-mic" style=" font-size:large;"></i></button>  
+        <button type = "button" class="btn rounded" id="mic" data-bs-toggle="button" style="background-color:#D84A68; color:#fff; margin-left:-0.25vw; margin-top:10px" onclick = "toggleMic(myStream)"><i class="bi bi-mic" style=" font-size:large;"></i></button>  
         <button type = "button" class="btn rounded " id="video" data-bs-toggle="button" style="background-color:#D84A68; color:#fff; margin-left:0.25vw; margin-top:10px" onclick="toggleVideo(myStream)"><i class="bi bi-camera-video" style=" font-size:large;"></i></button>  
         
       </div>

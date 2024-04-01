@@ -50,10 +50,11 @@ navigator.mediaDevices.getUserMedia({
 
 // SOCKET.IO
 socket.on('connect', (data) =>{
+    console.log(data);
     if (socket.userName == undefined)
          setMyName(generateUsername());
     else
-        setMyName(socket.username);
+        setMyName(socket.userName);
     connected = true;
     if (userName) socket.emit('login',userName);
     setUser(userName);
@@ -62,6 +63,10 @@ socket.on('connect', (data) =>{
 socket.on('chatStart', (data) => {
     if (!videoSwitch)
         toggleVideo(myStream);
+    if (!micSwitch)
+        toggleMic(myStream);
+    micSwitch=false;
+    setMyName(data.myname);
     hideModal();
     clearChat();
     textAbility(true);
@@ -70,9 +75,10 @@ socket.on('chatStart', (data) => {
     replaceCard(false,peer);
     introduce(peer);
     setResponder(peer);
+    switchMic(true,false);
+    switchMic(false,false);
     setUser(data.myname);
     socket.emit("peerID",myPeer.id);
-    console.log(myPeer.id);
 });
 
 
@@ -113,10 +119,23 @@ socket.on('rerolled', (data) => {
     
 });
 
+socket.on('peerMutedMic', (data) => {
+
+    switchMic(false,false);
+    
+});
+
+
+socket.on('peerUnMutedMic', (data) => {
+
+    switchMic(false,true);
+    
+});
+
 socket.on('peerMuted', (data) => {
 
     replaceCard(false,data);
-    
+
 });
 
 
@@ -125,7 +144,6 @@ socket.on('peerUnMuted', (data) => {
     addVideoStream(peerVideo,peerStream,true);
     
 });
-
 
 socket.on('chatMessage', (message) => {
     writeMessage(message,false);
@@ -243,5 +261,22 @@ function toggleVideo(stream) {
     }
   
   }
+
+  function toggleMic(stream) {
+    if(stream != null && stream.getAudioTracks().length > 0){
+      micSwitch = !micSwitch;
+      if (micSwitch == false){
+        socket.emit("micMute");
+        switchMic(true,micSwitch);
+      }
+      else{
+        socket.emit("micUnMute");
+        switchMic(true,micSwitch);
+      }
+        stream.getAudioTracks()[0].enabled = micSwitch;
+    }
+  
+  }
+
 
 

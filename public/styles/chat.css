@@ -195,7 +195,19 @@
 }
 
 video {
+  text-align:center;
+  border-radius:25px;
+  width:100%;
+}
 
-  border-radius:50px;
-  width:auto;
+.mic {
+  display: block;
+  font-size: 2em;
+  margin-top: 0.30em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+  color:white;
+  text-shadow: 2px 4px 4px rgba(0, 0, 0, 0.92);
 }

@@ -272,6 +272,7 @@ io.on('connection', (socket) => {
     socket.broadcast.to(room).emit('videoStart',data);
   });
   
+  // MUTE VIDEO
   socket.on("videoMute", () => {
     var room = rooms[socket.id];
     if (room != null){
@@ -282,10 +283,23 @@ io.on('connection', (socket) => {
     }
   });
 
+  // UNMUTE VIDEO
   socket.on("videoUnMute", () => {
     var room = rooms[socket.id];
     socket.broadcast.to(room).emit('peerUnMuted');
   });
+
+  // MUTE MIC
+  socket.on("micMute", () => {
+    var room = rooms[socket.id];
+    socket.broadcast.to(room).emit('peerMutedMic');
+  });
+
+    // UNMUTE MIC
+    socket.on("micUnMute", () => {
+      var room = rooms[socket.id];
+      socket.broadcast.to(room).emit('peerUnMutedMic');
+    });
 
   // chat message
   socket.on("chatMessage", (message) => {
