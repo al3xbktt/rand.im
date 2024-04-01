@@ -35,23 +35,22 @@ navigator.mediaDevices.getUserMedia({
     audio: true
 
 }).then(stream => {
+    addVideoStream(myVideo,stream)
     setMyStream(stream);
-    if (waitForElement(myStream)){
-        setMyStream(stream);
-        addVideoStream(myVideo,stream)
-        myPeer.on('call', call => {
-            call.answer(myStream);
-            const video = document.createElement('video');
-            call.on('stream',myStream => {
-                addVideoStream(video,myStream,true);
-            })
-        })  
-    }
+
+    myPeer.on('call', call => {
+        call.answer(myStream);
+        const video = document.createElement('video');
+        call.on('stream',myStream => {
+            addVideoStream(video,myStream,true);
+        })
+    })
 });
 
 
 // SOCKET.IO
 socket.on('connect', (data) =>{
+    console.log(data);
     if (socket.userName == undefined)
          setMyName(generateUsername());
     else
@@ -82,11 +81,9 @@ socket.on('chatStart', (data) => {
 
 
 socket.on('videoStart', (data) => {
-    if (waitForElement(myStream)){
     connectToCall(data,myStream);
     toggleVideo(myStream);
     toggleMic(myStream);
-    }
 });
 
 
@@ -283,12 +280,5 @@ function toggleVideo(stream) {
   
   }
 
-  function waitForElement(stream){
-    if(typeof stream !== "undefined"){
-        return true
-    }
-    else{
-        setTimeout(waitForElement, 250);
-        return false;
-    }
-}
+
+
