@@ -277,7 +277,6 @@ io.on('connection', (socket) => {
     var peerID = room.split('#');
     peerID = peerID[0] === socket.id ? peerID[0] : peerID[1];
     var name = names[peerID];
-    console.log(name);
     socket.broadcast.to(room).emit('peerMuted',name);
 
   });

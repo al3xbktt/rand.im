@@ -60,11 +60,14 @@ socket.on('connect', (data) =>{
 });
 
 socket.on('chatStart', (data) => {
+    if (!videoSwitch)
+        toggleVideo(myStream);
     hideModal();
     clearChat();
     textAbility(true);
     room = data.room;
     peer = data.name;
+    replaceCard(false,peer);
     introduce(peer);
     setResponder(peer);
     setUser(data.myname);
@@ -75,6 +78,7 @@ socket.on('chatStart', (data) => {
 
 socket.on('videoStart', (data) => {
     connectToCall(data,myStream);
+    toggleVideo(myStream);
 });
 
 
@@ -192,6 +196,7 @@ function connectToCall(userId, stream){
     const video = document.createElement('video'); 
     call.on('stream', stream => {
         addVideoStream(video,stream,true);
+        socket.emit("videoMute");
         setPeerStream(stream);
         setPeerVideo(video);
         video.setAttribute("id","VideoPeer");
