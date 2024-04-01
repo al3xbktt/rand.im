@@ -3,12 +3,18 @@ var connected = false;
 var userName = 'cyb3rflare';
 var room = '';
 var myStream;
+var peerStream;
+var peerVideo;
 var videoSwitch = true;
 var micSwitch = true;
 var currentCall;
 
 var setMyStream = function(stream){
     myStream = stream;
+}
+
+var setPeerStream = function(stream){
+    peerStream = stream;
 }
 
 var setMyCall = function(call){
@@ -19,6 +25,9 @@ var setMyName = function(name){
     userName = name;
 }
 
+var setPeerVideo = function(video){
+    peerVideo = video;
+}
 
 navigator.mediaDevices.getUserMedia({
 
@@ -109,7 +118,7 @@ socket.on('peerMuted', (data) => {
 
 socket.on('peerUnMuted', (data) => {
 
-    video.show();
+    addVideoStream(peerVideo,peerStream,true);
     
 });
 
@@ -183,7 +192,9 @@ function connectToCall(userId, stream){
     const video = document.createElement('video'); 
     call.on('stream', stream => {
         addVideoStream(video,stream,true);
-        video.setAttribute("id","peerVideo");
+        setPeerStream(stream);
+        setPeerVideo(video);
+        video.setAttribute("id","VideoPeer");
     })
     call.on('close', () => {
         disconnectFromCall(call);
