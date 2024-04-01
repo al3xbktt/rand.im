@@ -35,22 +35,23 @@ navigator.mediaDevices.getUserMedia({
     audio: true
 
 }).then(stream => {
-    addVideoStream(myVideo,stream)
     setMyStream(stream);
-
-    myPeer.on('call', call => {
-        call.answer(myStream);
-        const video = document.createElement('video');
-        call.on('stream',myStream => {
-            addVideoStream(video,myStream,true);
-        })
-    })
+    if (waitForElement(myStream)){
+        setMyStream(stream);
+        addVideoStream(myVideo,stream)
+        myPeer.on('call', call => {
+            call.answer(myStream);
+            const video = document.createElement('video');
+            call.on('stream',myStream => {
+                addVideoStream(video,myStream,true);
+            })
+        })  
+    }
 });
 
 
 // SOCKET.IO
 socket.on('connect', (data) =>{
-    console.log(data);
     if (socket.userName == undefined)
          setMyName(generateUsername());
     else
@@ -61,11 +62,9 @@ socket.on('connect', (data) =>{
 });
 
 socket.on('chatStart', (data) => {
+    micSwitch = true;
     if (!videoSwitch)
         toggleVideo(myStream);
-    if (!micSwitch)
-        toggleMic(myStream);
-    micSwitch=false;
     setMyName(data.myname);
     hideModal();
     clearChat();
@@ -83,8 +82,11 @@ socket.on('chatStart', (data) => {
 
 
 socket.on('videoStart', (data) => {
+    if (waitForElement(myStream)){
     connectToCall(data,myStream);
     toggleVideo(myStream);
+    toggleMic(myStream);
+    }
 });
 
 
@@ -93,6 +95,8 @@ socket.on('chatEnd', (data) => {
     room = '';  
     leaveRoom(data);
     textAbility(false);
+    if (!micSwitch)
+        toggleMic(myStream);
     socket.emit("waiting");
 
 });
@@ -215,6 +219,7 @@ function connectToCall(userId, stream){
     call.on('stream', stream => {
         addVideoStream(video,stream,true);
         socket.emit("videoMute");
+        socket.emit("micMute")
         setPeerStream(stream);
         setPeerVideo(video);
         video.setAttribute("id","VideoPeer");
@@ -278,5 +283,12 @@ function toggleVideo(stream) {
   
   }
 
-
-
+  function waitForElement(stream){
+    if(typeof stream !== "undefined"){
+        return true
+    }
+    else{
+        setTimeout(waitForElement, 250);
+        return false;
+    }
+}
