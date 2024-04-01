@@ -274,11 +274,12 @@ io.on('connection', (socket) => {
   
   socket.on("videoMute", () => {
     var room = rooms[socket.id];
+    if (room != null){
     var peerID = room.split('#');
     peerID = peerID[0] === socket.id ? peerID[0] : peerID[1];
     var name = names[peerID];
     socket.broadcast.to(room).emit('peerMuted',name);
-
+    }
   });
 
   socket.on("videoUnMute", () => {
