@@ -271,6 +271,21 @@ io.on('connection', (socket) => {
     var room = rooms[socket.id];
     socket.broadcast.to(room).emit('videoStart',data);
   });
+  
+  socket.on("videoMute", () => {
+    var room = rooms[socket.id];
+    var peerID = room.split('#');
+    peerID = peerID[0] === socket.id ? peerID[0] : peerID[1];
+    var name = names[peerID];
+    console.log(name);
+    socket.broadcast.to(room).emit('peerMuted',name);
+
+  });
+
+  socket.on("videoUnMute", () => {
+    var room = rooms[socket.id];
+    socket.broadcast.to(room).emit('peerUnMuted');
+  });
 
   // chat message
   socket.on("chatMessage", (message) => {
