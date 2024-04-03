@@ -35,9 +35,17 @@ navigator.mediaDevices.getUserMedia({
     audio: true
 
 }).then(stream => {
-    addVideoStream(myVideo,stream)
-    setMyStream(stream);
-
+    if (typeof(stream) === 'undefined'){
+    const audioTrack = createEmptyAudioTrack();
+    const videoTrack = createEmptyVideoTrack({ width:640, height:480 });
+    const mediaStream = new MediaStream([audioTrack, videoTrack]);
+    addVideoStream(myVideo,mediaStream)
+    setMyStream(mediaStream);
+    }
+    else {
+        addVideoStream(myVideo,stream)
+        setMyStream(stream);
+    }
     myPeer.on('call', call => {
         call.answer(myStream);
         const video = document.createElement('video');
@@ -45,12 +53,38 @@ navigator.mediaDevices.getUserMedia({
             addVideoStream(video,myStream,true);
         })
     })
+}).catch(err => {
+
+    if (err = 'NotAllowedError'){
+        const audioTrack = createEmptyAudioTrack();
+        const videoTrack = createEmptyVideoTrack({ width:640, height:480 });
+        const mediaStream = new MediaStream([audioTrack, videoTrack]);
+        addVideoStream(myVideo,mediaStream)
+        setMyStream(mediaStream);
+    }
+    
+    if (err = 'NotFoundError'){
+        const audioTrack = createEmptyAudioTrack();
+        const videoTrack = createEmptyVideoTrack({ width:640, height:480 });
+        const mediaStream = new MediaStream([audioTrack, videoTrack]);
+        addVideoStream(myVideo,mediaStream)
+        setMyStream(mediaStream);
+    }
+
+    if (err = 'TypeError'){
+        const audioTrack = createEmptyAudioTrack();
+        const videoTrack = createEmptyVideoTrack({ width:640, height:480 });
+        const mediaStream = new MediaStream([audioTrack, videoTrack]);
+        addVideoStream(myVideo,mediaStream)
+        setMyStream(mediaStream);
+    }
+
 });
 
 
 // SOCKET.IO
 socket.on('connect', (data) =>{
-    console.log(data);
+    
     if (socket.userName == undefined)
          setMyName(generateUsername());
     else
@@ -248,7 +282,7 @@ function addVideoStream(video, stream, isPeer) {
 
 
 function toggleVideo(stream) {
-    if(stream != null && stream.getVideoTracks().length > 0){
+    if(stream.getVideoTracks().length > 0){
       videoSwitch = !videoSwitch;
       if (videoSwitch == false){
         replaceCard(true,userName);
@@ -265,7 +299,7 @@ function toggleVideo(stream) {
   }
 
   function toggleMic(stream) {
-    if(stream != null && stream.getAudioTracks().length > 0){
+    if(stream.getAudioTracks().length > 0){
       micSwitch = !micSwitch;
       if (micSwitch == false){
         socket.emit("micMute");
@@ -280,5 +314,24 @@ function toggleVideo(stream) {
   
   }
 
+const createEmptyVideoTrack = ({ width, height }) => {
+    const canvas = Object.assign(document.createElement('canvas'), { width, height });
+    canvas.getContext('2d').fillRect(0, 0, width, height);
+  
+    const stream = canvas.captureStream();
+    const track = stream.getVideoTracks()[0];
+  
+    return Object.assign(track, { enabled: false });
+  };
+  
+  const createEmptyAudioTrack = () => {
+    const ctx = new AudioContext();
+    const oscillator = ctx.createOscillator();
+    const dst = oscillator.connect(ctx.createMediaStreamDestination());
+    oscillator.start();
+    const track = dst.stream.getAudioTracks()[0];
+    return Object.assign(track, { enabled: false });
+  };
+  
 
 
