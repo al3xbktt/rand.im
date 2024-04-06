@@ -1,7 +1,14 @@
 const app = require('express')();
 const express = require('express');
 const bodyParser = require("body-parser");
+const fs = require('node:fs');
 const http = require('http').createServer(app);
+/*const options = {
+  key: fs.readFileSync(`certs/privkey.pem`),
+  cert: fs.readFileSync(`certs/$fullchain.pem`)
+
+}
+const https = require('https').createServer(options, app).listen(443);*/
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const io = require('socket.io')(http);
@@ -192,7 +199,7 @@ app.get('/privacypolicy', (req, res) => {
 });
 
 
-http.listen(PORT, 5001, () => {
+http.listen(PORT, 80, () => {
   console.log(`Listening to ${PORT}`);
 });
 
