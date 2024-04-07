@@ -1,0 +1,20 @@
+/* public/styles/profile.css */
+
+body {
+    background-color: #5A082D;
+    color: white; /* Set text color to white */
+    font-size: 20px; /* Increase text size */
+}
+
+#profileListContainer h1 {
+    color: white; /* Set heading color to white */
+}
+
+#userList {
+    list-style: none;
+    padding: 0;
+}
+
+#userList li {
+    margin-bottom: 10px;
+}
