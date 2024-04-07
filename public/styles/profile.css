@@ -18,3 +18,16 @@ body {
 #userList li {
     margin-bottom: 10px;
 }
+
+.list-group-item {
+    background-color:#D84A68;
+    color:white;
+    outline:none;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }

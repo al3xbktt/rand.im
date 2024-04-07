@@ -19,7 +19,7 @@ function updateProfileList(usernames) {
     $("#userList").empty();
     // Add each username to the list
     usernames.forEach(function(username, index) {
-        $("#userList").append(`<li>${index + 1}. ${username}</li>`);
+        $("#userList").append(`<li class="list-group-item border-0 rounded">${index + 1}. ${username}</li>`);
     });
 }
 
