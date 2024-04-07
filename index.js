@@ -26,7 +26,7 @@ const pool = new Pool({
   user:'postgres',
   host:'localhost',
   database: 'rand.im',
-  password: 'arbecket',
+  password: 'Cadaccee045604!!',
   port: '5432'
 
 });
@@ -394,3 +394,15 @@ function removeDuplicates(array){
     return inputArray.indexOf(item) == index;
   });
 }
+
+// Adding this new endpoint to fetch usernames from the database
+app.get('/api/usernames', async (req, res) => {
+  try {
+      const usernamesQuery = await pool.query("SELECT username FROM users");
+      const usernames = usernamesQuery.rows.map(row => row.username);
+      res.json({ usernames });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Failed to fetch usernames" });
+  }
+});
