@@ -3,12 +3,13 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const fs = require('node:fs');
 const http = require('http').createServer(app);
-/*const options = {
-  key: fs.readFileSync(`certs/privkey.pem`),
-  cert: fs.readFileSync(`certs/$fullchain.pem`)
 
-}
-const https = require('https').createServer(options, app).listen(443);*/
+const options = {
+  cert: fs.readFileSync('/etc/letsencrypt/live/domain-or-subdomain.in/fullchain.pem'),
+  key: fs.readFileSync('/etc/letsencrypt/live/domain-or-subdomain.in/privkey.pem')
+};
+
+const https = require('https').createServer(options, app).listen(443);
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const io = require('socket.io')(http);
