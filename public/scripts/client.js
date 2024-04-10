@@ -265,7 +265,6 @@ function connectToCall(userId, stream){
     setMyCall(call);
     const video = document.createElement('video'); 
     call.on('stream', stream => {
-        addVideoStream(video,stream,true);
         socket.emit("videoMute");
         socket.emit("micMute")
         setPeerStream(stream);

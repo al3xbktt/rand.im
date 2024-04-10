@@ -232,7 +232,6 @@ var findLonePeer = function(socket) {
     socket.inQueue = inQueue;
     inChat = true;
     socket.inChat = inChat;
-    console.log(socket.inQueue);
   }
 
   else if (queue.length > 0 && queue[0] == socket){
@@ -246,7 +245,6 @@ var findLonePeer = function(socket) {
     socket.emit('loading', inQueue);
     console.log("\ncurrent queue:");
     printArray(queue);
-    console.log(socket.inQueue);
     inChat = false;
     socket.inChat = inChat;
   }
@@ -279,8 +277,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('ready', () => {
-    console.log(socket.id + " in queue? : " + socket.inQueue);
-    console.log(socket.id + " in chat? : " + socket.inChat);
     if (socket.inQueue == false && socket.inChat == false){
     findLonePeer(socket);
     }
