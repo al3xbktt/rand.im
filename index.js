@@ -212,6 +212,7 @@ var allUsers = {};
 var findLonePeer = function(socket) {
 
   var inQueue;
+  var inChat;
 
   if (queue.length != 0 && queue[0] != socket){
     // there is someone in queue other than you
@@ -229,6 +230,9 @@ var findLonePeer = function(socket) {
     console.log(socket.id + " matched with " + peer.id + " in room: " + room );
     inQueue = false;
     socket.inQueue = inQueue;
+    inChat = true;
+    socket.inChat = inChat;
+    console.log(socket.inQueue);
   }
 
   else if (queue.length > 0 && queue[0] == socket){
@@ -242,6 +246,9 @@ var findLonePeer = function(socket) {
     socket.emit('loading', inQueue);
     console.log("\ncurrent queue:");
     printArray(queue);
+    console.log(socket.inQueue);
+    inChat = false;
+    socket.inChat = inChat;
   }
 };
 
@@ -250,6 +257,7 @@ io.engine.use(sessionMiddleware);
 
 io.on('connection', (socket) => {
   socket.inQueue = false; 
+  socket.inChat = false;
   
   connectedUsers++;
   if (socket.request.session.username != undefined){
@@ -271,7 +279,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('ready', () => {
-    if (socket.inQueue == false){
+    console.log(socket.id + " in queue? : " + socket.inQueue);
+    console.log(socket.id + " in chat? : " + socket.inChat);
+    if (socket.inQueue == false && socket.inChat == false){
     findLonePeer(socket);
     }
   });
