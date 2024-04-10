@@ -242,12 +242,6 @@ function generateUsername(){
     return name;
 };
 
-function acceptUsername(name){
-
-    socket.emit('setUsername',name);
-    setUser(name);
-    setMyName(name);
-};
 
 // PEERJS
 

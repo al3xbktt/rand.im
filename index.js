@@ -379,11 +379,6 @@ io.on('connection', (socket) => {
       socket.broadcast.to(room).emit('loading',data);
   });
 
-  socket.on('setUsername',(data) =>{
-    socket.data.userName = data;
-    names[socket.id] = data;
-  });
-
   io.emit('connectedUsersCount', connectedUsers);
 
 });
