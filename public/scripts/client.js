@@ -90,6 +90,7 @@ socket.on('connect', (data) =>{
         setMyName(socket.userName);
     connected = true;
 
+    if (connected) socket.emit('login', userName);
     showMediaModal();
 });
 
@@ -217,7 +218,7 @@ function emitTyping(data){
 function mediaAnswer(data){
     if (data === true){
         hideMediaModal();
-        if (connected) socket.emit('login', userName);
+        if (connected) socket.emit('ready');
     }
     else if (data === false){
         hideMediaModal();
@@ -225,8 +226,7 @@ function mediaAnswer(data){
         const videoTrack = createEmptyVideoTrack({ width:640, height:480 });
         const mediaStream = new MediaStream([audioTrack, videoTrack]);
         setMyStream(mediaStream);
-        if (connected) socket.emit('login', userName);
-
+        if (connected) socket.emit('ready');
     }
     
 }

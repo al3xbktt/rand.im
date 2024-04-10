@@ -228,6 +228,7 @@ var findLonePeer = function(socket) {
     socket.emit('chatStart', {name: names[peer.id],'room':room,myname: names[socket.id]});
     console.log(socket.id + " matched with " + peer.id + " in room: " + room );
     inQueue = false;
+    socket.inQueue = inQueue;
   }
 
   else if (queue.length > 0 && queue[0] == socket){
@@ -237,6 +238,7 @@ var findLonePeer = function(socket) {
     console.log(socket.id + " pushed into queue with username: " + names[socket.id]);
     queue.push(socket);
     inQueue = true;
+    socket.inQueue = inQueue;
     socket.emit('loading', inQueue);
     console.log("\ncurrent queue:");
     printArray(queue);
@@ -247,6 +249,8 @@ io.engine.use(sessionMiddleware);
 
 
 io.on('connection', (socket) => {
+  socket.inQueue = false; 
+  
   connectedUsers++;
   if (socket.request.session.username != undefined){
     console.log('user #' + socket.id +' connected with username ' + " with username " + socket.request.session.username +  '. Total users: ' + connectedUsers);
@@ -263,8 +267,13 @@ io.on('connection', (socket) => {
     else
       names[socket.id] = data;
     allUsers[socket.id] = socket;
-    findLonePeer(socket);
     console.log(socket.id + " logged in");
+  });
+
+  socket.on('ready', () => {
+    if (socket.inQueue == false){
+    findLonePeer(socket);
+    }
   });
 
   // getPeerID
