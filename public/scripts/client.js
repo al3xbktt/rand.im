@@ -43,7 +43,6 @@ navigator.mediaDevices.getUserMedia({
     setMyStream(mediaStream);
     }
     else {
-        addVideoStream(myVideo,stream)
         setMyStream(stream);
     }
     myPeer.on('call', call => {
@@ -90,8 +89,8 @@ socket.on('connect', (data) =>{
     else
         setMyName(socket.userName);
     connected = true;
-    if (userName) socket.emit('login',userName);
-    setUser(userName);
+
+    showMediaModal();
 });
 
 socket.on('chatStart', (data) => {
@@ -99,7 +98,8 @@ socket.on('chatStart', (data) => {
     if (!videoSwitch)
         toggleVideo(myStream);
     setMyName(data.myname);
-    hideModal();
+    hideLoadModal();
+    hideMediaModal();
     clearChat();
     textAbility(true);
     room = data.room;
@@ -193,7 +193,7 @@ socket.on('isTyping',(data) => {
 socket.on('loading', (data) => {
 
     if (data){
-        showModal();
+        showLoadModal();
         textAbility(false);
     }
 });
@@ -213,6 +213,23 @@ function emitMessage(text) {
 function emitTyping(data){
     if (connected) socket.emit('isTyping',data);
 };
+
+function mediaAnswer(data){
+    if (data === true){
+        hideMediaModal();
+        if (connected) socket.emit('login', userName);
+    }
+    else if (data === false){
+        hideMediaModal();
+        const audioTrack = createEmptyAudioTrack();
+        const videoTrack = createEmptyVideoTrack({ width:640, height:480 });
+        const mediaStream = new MediaStream([audioTrack, videoTrack]);
+        setMyStream(mediaStream);
+        if (connected) socket.emit('login', userName);
+
+    }
+    
+}
 
 function reroll(){
     if (connected) {

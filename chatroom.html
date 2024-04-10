@@ -62,7 +62,7 @@
             </div>
           </div>
         </div>    
-        <button class="btn rounded" id="reroll" type="submit" style="background-color:#D84A68; color:#fff; width:22vw; height:6.5vh; margin-left:-0.25vw;" onclick="showModal(),reroll(),disconnectFromCall(currentCall)"><i class="bi bi-dice-6" style=" font-size:large;"> Reroll!</i></button>
+        <button class="btn rounded" id="reroll" type="submit" style="background-color:#D84A68; color:#fff; width:22vw; height:6.5vh; margin-left:-0.25vw;" onclick="showLoadModal(),reroll(),disconnectFromCall(currentCall)"><i class="bi bi-dice-6" style=" font-size:large;"> Reroll!</i></button>
         <button type = "button" class="btn rounded" id="mic" data-bs-toggle="button" style="background-color:#D84A68; color:#fff; margin-left:-0.25vw; margin-top:10px" onclick = "toggleMic(myStream)"><i class="bi bi-mic" style=" font-size:large;"></i></button>  
         <button type = "button" class="btn rounded " id="video" data-bs-toggle="button" style="background-color:#D84A68; color:#fff; margin-left:0.25vw; margin-top:10px" onclick="toggleVideo(myStream)"><i class="bi bi-camera-video" style=" font-size:large;"></i></button>  
         
@@ -96,6 +96,16 @@
         <h1 style="color:white; font-size:2vw;" id="splashtext">Rerolling you a new partner!</h1>
       </div>
     </div>
+
+     <!-- media modal -->
+     <div id="media-modal" class="modal">
+      <div class="modal-content center" style="text-align:center">
+          <h1 style="color:white; font-size:2vw;" id="splashtext">Would you like use your Mic and Video?</h1>
+          <button type="button" class="btn btn-lg" style="background-color:#bf3647; outline:none; color:white;" onclick="mediaAnswer(true)">Yes</button>
+          <button type="button" class="btn btn-lg" style="background-color:#bf3647; outline:none; color:white;" onclick="mediaAnswer(false)">No</button>
+
+        </div>
+      </div>
 
   </body>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" type="text/javascript"></script>

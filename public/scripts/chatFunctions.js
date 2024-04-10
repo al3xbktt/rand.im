@@ -107,13 +107,30 @@ function timeoutFunction() {
 };
 
 //functionality = show the loading modal
-function showModal(){
+function showLoadModal(){
   $("#load-modal").attr("style","display:block");
 }
     
 //functionality = hide the loading modal
-function hideModal(){
+function hideLoadModal(){
   $("#load-modal").attr("style","display:hidden");
+}
+
+function showMediaModal(){
+  $("#media-modal").attr("style","display:block");
+}
+    
+//functionality = hide the loading modal
+function hideMediaModal(){
+  $("#media-modal").attr("style","display:hidden");
+}
+
+function mediaResponse(answer){
+
+  hideMediaModal();
+  mediaAnswer(answer);
+
+
 }
 
 //functionality = write introduction to other user with username
