@@ -249,9 +249,13 @@ const myPeer = new Peer(undefined, {
     host: "ec2-44-201-97-191.compute-1.amazonaws.com",
     port: 9000,
     path: "/myapp",
-    config: {'iceServers': [
-        { url: 'stun:stun.l.google.com:19302' },
-    ]}});
+    secure: true,
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302'  }, 
+        { urls: 'stun:stun1.l.google.com:19302' }, 
+        { urls: 'stun:stun2.l.google.com:19302' }, 
+    ]
+});
 
     const myVideo = document.createElement('video') // Create a new video tag to show our video
     myVideo.muted = true;
