@@ -246,7 +246,7 @@ function generateUsername(){
 // PEERJS
 
 const myPeer = new Peer(undefined, {
-    host: "localhost",
+    host: "ec2-44-201-97-191.compute-1.amazonaws.com",
     port: 9000,
     path: "/myapp",});
 
