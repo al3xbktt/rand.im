@@ -10,6 +10,7 @@ const Pool = require('pg').Pool;
 var session = require('express-session')
 const { PeerServer } = require('peer');
 const peerServer = PeerServer({port:9000,path:'/myapp'});
+require('dotenv').config();
 
 
 var sessionMiddleware = session({
